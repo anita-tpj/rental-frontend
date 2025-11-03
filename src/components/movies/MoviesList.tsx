@@ -1,6 +1,7 @@
 import { Button, Card, Flex } from "@radix-ui/themes";
 import useDeleteMovie from "../../hooks/movies/useDeleteMovie";
 import useMovies from "../../hooks/movies/useMovies";
+import { useAuthCtx } from "../../context/AuthContext";
 
 interface MoviesListProps {
   selectedGenre: string | undefined;
@@ -8,8 +9,8 @@ interface MoviesListProps {
 
 const MoviesList = ({ selectedGenre }: MoviesListProps) => {
   const { data, error, isLoading } = useMovies(selectedGenre);
-
   const deleteMovie = useDeleteMovie();
+  const { isAuthed } = useAuthCtx();
 
   if (isLoading) return <p>Loading...</p>;
   if (error)
@@ -29,10 +30,11 @@ const MoviesList = ({ selectedGenre }: MoviesListProps) => {
               <p>Daily rental rate: {movie.dailyRentalRate}$</p>
               <p>Stock: {movie.numberInStock}</p>
             </div>
-
-            <Button onClick={() => deleteMovie.mutate(movie._id!)}>
-              Delete
-            </Button>
+            {isAuthed ? (
+              <Button onClick={() => deleteMovie.mutate(movie._id!)}>
+                Delete
+              </Button>
+            ) : null}
           </Flex>
         </Card>
       ))}

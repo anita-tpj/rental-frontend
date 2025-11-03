@@ -5,11 +5,13 @@ import useAddGenre from "../hooks/genres/useAddGenre";
 import useDeleteGenre from "../hooks/genres/useDeleteGenre";
 import useGenres from "../hooks/genres/useGenres";
 import SubTitle from "../components/SubTitle";
+import { useAuthCtx } from "../context/AuthContext";
 
 const GenresPage = () => {
   const { data, error, isLoading } = useGenres();
-  const ref = useRef<HTMLInputElement>(null);
   const deleteGenre = useDeleteGenre();
+  const ref = useRef<HTMLInputElement>(null);
+  const { isAuthed } = useAuthCtx();
 
   const onAdd = () => {
     if (ref.current) ref.current.value = "";
@@ -31,40 +33,45 @@ const GenresPage = () => {
         justify="between"
         direction={{ initial: "column", md: "row" }}
       >
-        <Box width={{ initial: "100%", md: "50%" }}>
-          <SubTitle subTitle="Add new genre" />
-          <Card>
-            <form
-              onSubmit={(event) => {
-                event.preventDefault();
-                addGenre.mutate({ name: ref.current?.value || "" });
-              }}
-            >
-              <Flex gap="4" align="center">
-                <TextField.Root
-                  className="grow"
-                  ref={ref}
-                  size="3"
-                  placeholder="Type genre..."
-                />
-                <Button size="3">ADD GENRE</Button>
-              </Flex>
-            </form>
-          </Card>
-        </Box>
+        {isAuthed ? (
+          <Box width={{ initial: "100%", md: "50%" }}>
+            <SubTitle subTitle="Add new genre" />
+            <Card>
+              <form
+                onSubmit={(event) => {
+                  event.preventDefault();
+                  addGenre.mutate({ name: ref.current?.value || "" });
+                }}
+              >
+                <Flex gap="4" align="center">
+                  <TextField.Root
+                    className="grow"
+                    ref={ref}
+                    size="3"
+                    placeholder="Type genre..."
+                  />
+                  <Button size="3">ADD GENRE</Button>
+                </Flex>
+              </form>
+            </Card>
+          </Box>
+        ) : null}
+
         <Box width={{ initial: "100%", md: "50%" }}>
           <SubTitle subTitle="Genres" />
           {data?.map((genre) => (
             <Card key={genre._id} className="my-4">
               <Flex justify="between" align="center">
                 {genre.name}
-                <Button
-                  onClick={() => {
-                    deleteGenre.mutate(genre._id!);
-                  }}
-                >
-                  Delete
-                </Button>
+                {isAuthed ? (
+                  <Button
+                    onClick={() => {
+                      deleteGenre.mutate(genre._id!);
+                    }}
+                  >
+                    Delete
+                  </Button>
+                ) : null}
               </Flex>
             </Card>
           ))}

@@ -4,9 +4,11 @@ import GenreSelect from "../components/genres/GenreSelect";
 import MovieForm from "../components/movies/MovieForm";
 import MoviesList from "../components/movies/MoviesList";
 import SubTitle from "../components/SubTitle";
+import { useAuthCtx } from "../context/AuthContext";
 
 const MoviesPage = () => {
   const [selectedGenre, setSelectedGenre] = useState<string>();
+  const { isAuthed } = useAuthCtx();
 
   return (
     <Flex
@@ -22,9 +24,11 @@ const MoviesPage = () => {
         />
         <MoviesList selectedGenre={selectedGenre} />
       </Box>
-      <Box width={{ initial: "100%", md: "45%" }}>
-        <MovieForm />
-      </Box>
+      {isAuthed ? (
+        <Box width={{ initial: "100%", md: "45%" }}>
+          <MovieForm />
+        </Box>
+      ) : null}
 
       {/* <Link to="/movies/new">Add new movie to list</Link>
       <Outlet /> */}
