@@ -26,7 +26,7 @@ const MoviesList = ({ selectedGenre }: MoviesListProps) => {
             <div>
               <p>Title: {movie.title}</p>
               <p>Genre: {movie.genre?.name}</p>
-              <p>Daily rental rate: {movie.dailyRentalRate}</p>
+              <p>Daily rental rate: {movie.dailyRentalRate}$</p>
               <p>Stock: {movie.numberInStock}</p>
             </div>
 

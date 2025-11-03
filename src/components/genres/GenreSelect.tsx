@@ -1,4 +1,4 @@
-import { Box, Select } from "@radix-ui/themes";
+import { Select } from "@radix-ui/themes";
 import useGenres from "../../hooks/genres/useGenres";
 
 interface GenreSelectProps {
@@ -18,18 +18,16 @@ const GenreSelect = ({ value, onChange }: GenreSelectProps) => {
     );
 
   return (
-    <Box className="w-1/2">
-      <Select.Root size="3" value={value} onValueChange={onChange}>
-        <Select.Trigger className="w-full" placeholder="Select genre" />
-        <Select.Content>
-          {data?.map((genre) => (
-            <Select.Item key={genre.name} value={genre.name}>
-              {genre.name}
-            </Select.Item>
-          ))}
-        </Select.Content>
-      </Select.Root>
-    </Box>
+    <Select.Root size="3" value={value} onValueChange={onChange}>
+      <Select.Trigger className="w-full" placeholder="Select genre" />
+      <Select.Content>
+        {data?.map((genre) => (
+          <Select.Item key={genre._id} value={genre._id!}>
+            {genre.name}
+          </Select.Item>
+        ))}
+      </Select.Content>
+    </Select.Root>
   );
 };
 

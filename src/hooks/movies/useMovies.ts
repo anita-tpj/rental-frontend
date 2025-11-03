@@ -5,7 +5,7 @@ import movieService from "../../services/movieService";
 
 const useMovies = (genre: string | undefined) => {
   return useQuery<Movie[], Error>({
-    queryKey: [CACHE_KEY_MOVIES, { genre }],
+    queryKey: [...CACHE_KEY_MOVIES, { genre }],
     queryFn: () =>
       movieService.getAll({
         params: { genre },

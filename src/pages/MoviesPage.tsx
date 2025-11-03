@@ -7,6 +7,7 @@ import SubTitle from "../components/SubTitle";
 
 const MoviesPage = () => {
   const [selectedGenre, setSelectedGenre] = useState<string>();
+
   return (
     <Flex
       gap="9"

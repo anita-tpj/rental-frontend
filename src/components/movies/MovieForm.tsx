@@ -14,14 +14,16 @@ import SubTitle from "../SubTitle";
 
 function MovieForm() {
   const [selectedGenre, setSelectedGenre] = useState<string>();
-  const [stock, setStock] = useState("1");
-  const [rate, setRate] = useState("1");
+  const [stock, setStock] = useState("");
+  const [rate, setRate] = useState("");
   const refTitle = useRef<HTMLInputElement>(null);
 
   const onAdd = () => {
     if (refTitle.current) refTitle.current.value = "";
-    setStock("1");
-    setRate("1");
+
+    setStock("");
+    setRate("");
+    setSelectedGenre("");
   };
 
   const addMovie = useAddMovie(onAdd);
@@ -37,7 +39,12 @@ function MovieForm() {
           const dailyRentalRate = Number(rate);
 
           if (!title) {
-            console.error("Title required");
+            console.error("Title is required");
+            return;
+          }
+
+          if (!selectedGenre) {
+            console.error("Genre is required");
             return;
           }
 
@@ -45,7 +52,7 @@ function MovieForm() {
             title,
             numberInStock,
             dailyRentalRate,
-            genreId: "6908ef006a4a12866a2da14a",
+            genreId: selectedGenre,
           });
         }}
       >
@@ -55,8 +62,8 @@ function MovieForm() {
             value={selectedGenre}
             onChange={(genre) => setSelectedGenre(genre)}
           />
-          <Select.Root value={stock} onValueChange={setStock}>
-            <Select.Trigger placeholder="Stock" />
+          <Select.Root size="3" value={stock} onValueChange={setStock}>
+            <Select.Trigger placeholder="Select stock" />
             <Select.Content>
               {[...Array(10)].map((_, i) => (
                 <Select.Item key={i} value={String(i + 1)}>
@@ -65,9 +72,8 @@ function MovieForm() {
               ))}
             </Select.Content>
           </Select.Root>
-
-          <Select.Root value={rate} onValueChange={setRate}>
-            <Select.Trigger placeholder="Rate" />
+          <Select.Root size="3" value={rate} onValueChange={setRate}>
+            <Select.Trigger placeholder="Select rate" />
             <Select.Content>
               {[...Array(10)].map((_, r) => (
                 <Select.Item key={r} value={String(r + 1)}>

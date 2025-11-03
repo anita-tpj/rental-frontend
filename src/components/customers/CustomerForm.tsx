@@ -27,7 +27,6 @@ const CustomerForm = () => {
         <TextField.Root ref={refName} placeholder="Type name" />
         <TextField.Root ref={refPhone} placeholder="Type phone" />
         <Flex gap="2" align="center">
-          <Checkbox />
           <Checkbox
             checked={isGold}
             onCheckedChange={(checked) => setIsGold(checked === true)}
