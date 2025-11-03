@@ -36,6 +36,7 @@ const CustomersPage = () => {
                 <p>Name: {customer.name}</p>
                 <p>Phone: {customer.phone}</p>
                 <p>is Gold: {customer.isGold ? "Yes" : "No"}</p>
+                <p>ID: {customer._id}</p>
               </Box>
               <Button
                 onClick={() => {

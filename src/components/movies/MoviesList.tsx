@@ -29,6 +29,7 @@ const MoviesList = ({ selectedGenre }: MoviesListProps) => {
               <p>Genre: {movie.genre?.name}</p>
               <p>Daily rental rate: {movie.dailyRentalRate}$</p>
               <p>Stock: {movie.numberInStock}</p>
+              <p>ID: {movie._id}</p>
             </div>
             {isAuthed ? (
               <Button onClick={() => deleteMovie.mutate(movie._id!)}>

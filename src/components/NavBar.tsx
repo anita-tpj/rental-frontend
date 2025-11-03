@@ -4,6 +4,9 @@ const NavBar = () => {
   return (
     <TabNav.Root>
       <TabNav.Link asChild>
+        <Link to="/rentals">Rentals</Link>
+      </TabNav.Link>
+      <TabNav.Link asChild>
         <Link to="/movies">Movies</Link>
       </TabNav.Link>
       <TabNav.Link asChild>

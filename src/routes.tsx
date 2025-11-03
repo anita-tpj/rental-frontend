@@ -9,6 +9,7 @@ import MoviesPage from "./pages/MoviesPage";
 import CustomersPage from "./pages/CustomerPage";
 import UsersPage from "./pages/UsersPage";
 import LoginPage from "./pages/LoginPage";
+import RentalsPage from "./pages/RentalPage";
 
 const router = createBrowserRouter([
   {
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
           {
             path: "users",
             element: <UsersPage />,
+          },
+          {
+            path: "rentals",
+            element: <RentalsPage />,
           },
         ],
       },
