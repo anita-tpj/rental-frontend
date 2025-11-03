@@ -10,7 +10,11 @@ const GenresPage = () => {
   const { data, error, isLoading } = useGenres();
   const ref = useRef<HTMLInputElement>(null);
   const deleteGenre = useDeleteGenre();
-  const addGenre = useAddGenre();
+
+  const onAdd = () => {
+    if (ref.current) ref.current.value = "";
+  };
+  const addGenre = useAddGenre(onAdd);
 
   if (isLoading) return <p>Loading...</p>;
   if (error)
@@ -29,22 +33,24 @@ const GenresPage = () => {
       >
         <Box width={{ initial: "100%", md: "50%" }}>
           <SubTitle subTitle="Add new genre" />
-          <form
-            onSubmit={(event) => {
-              event.preventDefault();
-              addGenre.mutate({ name: ref.current?.value || "" });
-            }}
-          >
-            <Flex gap="4" align="center">
-              <TextField.Root
-                className="grow"
-                ref={ref}
-                size="3"
-                placeholder="Type genre..."
-              />
-              <Button size="3">ADD GENRE</Button>
-            </Flex>
-          </form>
+          <Card>
+            <form
+              onSubmit={(event) => {
+                event.preventDefault();
+                addGenre.mutate({ name: ref.current?.value || "" });
+              }}
+            >
+              <Flex gap="4" align="center">
+                <TextField.Root
+                  className="grow"
+                  ref={ref}
+                  size="3"
+                  placeholder="Type genre..."
+                />
+                <Button size="3">ADD GENRE</Button>
+              </Flex>
+            </form>
+          </Card>
         </Box>
         <Box width={{ initial: "100%", md: "50%" }}>
           <SubTitle subTitle="Genres" />
