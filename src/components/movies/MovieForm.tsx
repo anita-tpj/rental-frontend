@@ -45,7 +45,7 @@ function MovieForm() {
             title,
             numberInStock,
             dailyRentalRate,
-            genreId: "6903708d380724564715c1fe",
+            genreId: "6908ef006a4a12866a2da14a",
           });
         }}
       >
