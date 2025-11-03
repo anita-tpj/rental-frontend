@@ -53,7 +53,7 @@ const RentalsPage = () => {
                   </p>
                   <p>
                     <strong>Fee: </strong>
-                    {rental.rentalFee}$
+                    {rental.rentalFee ? `${rental.rentalFee}$` : ""}
                   </p>
                 </div>
               </Flex>
