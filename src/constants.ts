@@ -1,0 +1,4 @@
+export const CACHE_KEY_GENRES = ["genres"]
+export const CACHE_KEY_MOVIES = ["movies"]
+export const CACHE_KEY_CUSTOMERS = ["customers"]
+export const CACHE_KEY_USERS = ["users"]
