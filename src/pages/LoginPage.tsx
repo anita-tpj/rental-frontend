@@ -20,30 +20,28 @@ export default function LoginPage() {
   const passwordRef = useRef<HTMLInputElement>(null);
 
   return (
-    <Card>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          const email = emailRef.current?.value || "";
-          const password = passwordRef.current?.value || "";
-          if (!email || !password) return;
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        const email = emailRef.current?.value || "";
+        const password = passwordRef.current?.value || "";
+        if (!email || !password) return;
 
-          login.mutate({ email, password });
-        }}
-      >
-        <SubTitle subTitle="Log In" />
-        <Flex direction="column" gap="3" style={{ maxWidth: 360 }}>
-          <TextField.Root ref={emailRef} type="email" placeholder="Email" />
-          <TextField.Root
-            ref={passwordRef}
-            type="password"
-            placeholder="Password"
-          />
-          <Button type="submit" disabled={login.isPending}>
-            {login.isPending ? "LOGGING IN..." : "LOG IN"}
-          </Button>
-        </Flex>
-      </form>
-    </Card>
+        login.mutate({ email, password });
+      }}
+    >
+      <SubTitle subTitle="Log In" />
+      <Flex direction="column" gap="3" style={{ maxWidth: 360 }}>
+        <TextField.Root ref={emailRef} type="email" placeholder="Email" />
+        <TextField.Root
+          ref={passwordRef}
+          type="password"
+          placeholder="Password"
+        />
+        <Button type="submit" disabled={login.isPending}>
+          {login.isPending ? "LOGGING IN..." : "LOG IN"}
+        </Button>
+      </Flex>
+    </form>
   );
 }

@@ -1,16 +1,12 @@
-import { Button, Flex, TextField } from "@radix-ui/themes";
+import { Flex, TextField } from "@radix-ui/themes";
 import { useRef } from "react";
-import useAddRental from "../../hooks/rentals/useAddRental";
+import { Rental } from "../../services/rentalService";
 import FormModal from "../FormModal";
+import useReturnRental from "../../hooks/rentals/useReturnRental";
 
-const RentalForm = () => {
+const ReturnRental = ({ rental }: { rental: Rental }) => {
   const refCustomer = useRef<HTMLInputElement>(null);
   const refMovie = useRef<HTMLInputElement>(null);
-
-  const onAdd = () => {
-    if (refCustomer.current) refCustomer.current.value = "";
-    if (refMovie.current) refMovie.current.value = "";
-  };
 
   const onSubmit = (event: HTMLFormElement) => {
     event.preventDefault();
@@ -18,16 +14,16 @@ const RentalForm = () => {
       console.error("Fields are required");
       return;
     }
-    addRental.mutate({
-      customerId: refCustomer.current?.value,
-      movieId: refMovie.current?.value,
+    returnRental.mutate({
+      customerId: refCustomer.current.value,
+      movieId: refMovie.current.value,
     });
   };
 
-  const addRental = useAddRental(onAdd);
+  const returnRental = useReturnRental();
 
   return (
-    <FormModal name="Open new rental" onSubmit={onSubmit}>
+    <FormModal name="Return rental" onSubmit={onSubmit}>
       <Flex gap="4" direction="column">
         <TextField.Root ref={refCustomer} placeholder="Type customer ID" />
         <TextField.Root ref={refMovie} placeholder="Type movie ID" />
@@ -36,4 +32,4 @@ const RentalForm = () => {
   );
 };
 
-export default RentalForm;
+export default ReturnRental;

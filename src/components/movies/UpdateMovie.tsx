@@ -1,31 +1,16 @@
-import {
-  Button,
-  Card,
-  Flex,
-  Select,
-  TextArea,
-  TextField,
-} from "@radix-ui/themes";
+import { Flex, Select, TextArea, TextField } from "@radix-ui/themes";
 import { Box } from "@radix-ui/themes/src/index.js";
 import { useRef, useState } from "react";
-import useAddMovie from "../../hooks/movies/useAddMovie";
-import GenreSelect from "../genres/GenreSelect";
-import SubTitle from "../SubTitle";
+import useUpdateMovie from "../../hooks/movies/useUpdateMovie";
+import { Movie } from "../../services/movieService";
 import FormModal from "../FormModal";
+import GenreSelect from "../genres/GenreSelect";
 
-function MovieForm() {
+function UpdateMovie({ movie }: { movie: Movie }) {
   const [selectedGenre, setSelectedGenre] = useState<string>();
   const [stock, setStock] = useState("");
   const [rate, setRate] = useState("");
   const refTitle = useRef<HTMLInputElement>(null);
-
-  const onAdd = () => {
-    if (refTitle.current) refTitle.current.value = "";
-
-    setStock("");
-    setRate("");
-    setSelectedGenre("");
-  };
 
   const onSubmit = (event: HTMLFormElement) => {
     event.preventDefault();
@@ -43,25 +28,38 @@ function MovieForm() {
       return;
     }
 
-    addMovie.mutate({
-      title,
-      numberInStock,
-      dailyRentalRate,
-      genreId: selectedGenre,
+    updateMovie.mutate({
+      id: movie._id!,
+      data: {
+        title,
+        numberInStock,
+        dailyRentalRate,
+        genreId: selectedGenre,
+      },
     });
   };
 
-  const addMovie = useAddMovie(onAdd);
+  const updateMovie = useUpdateMovie();
 
   return (
-    <FormModal name="Add new movie" onSubmit={onSubmit}>
+    <FormModal name="Update movie" onSubmit={onSubmit}>
       <Flex direction="column" gap="3">
-        <TextField.Root ref={refTitle} size="3" placeholder="Type title" />
+        <TextField.Root
+          ref={refTitle}
+          defaultValue={movie.title}
+          size="3"
+          placeholder="Type title"
+        />
         <GenreSelect
           value={selectedGenre}
           onChange={(genre) => setSelectedGenre(genre)}
         />
-        <Select.Root size="3" value={stock} onValueChange={setStock}>
+        <Select.Root
+          size="3"
+          value={stock}
+          onValueChange={setStock}
+          defaultValue={movie.numberInStock}
+        >
           <Select.Trigger placeholder="Select stock" />
           <Select.Content>
             {[...Array(10)].map((_, i) => (
@@ -71,7 +69,12 @@ function MovieForm() {
             ))}
           </Select.Content>
         </Select.Root>
-        <Select.Root size="3" value={rate} onValueChange={setRate}>
+        <Select.Root
+          size="3"
+          value={rate}
+          onValueChange={setRate}
+          defaultValue={movie.dailyRentalRate}
+        >
           <Select.Trigger placeholder="Select rate" />
           <Select.Content>
             {[...Array(10)].map((_, r) => (
@@ -81,17 +84,17 @@ function MovieForm() {
             ))}
           </Select.Content>
         </Select.Root>
-        <TextArea resize="both" placeholder="Type description" />
+        {/* <TextArea resize="both" placeholder="Type description" /> */}
         {/* <Box width="auto">
           <Button size="3" disabled={addMovie.isPending}>
             {addMovie.isPending ? "SAVING" : "ADD MOVIE"}
           </Button>
         </Box> */}
 
-        {addMovie.error ? <Box>{addMovie.error.message};</Box> : null}
+        {updateMovie.error ? <Box>{updateMovie.error.message};</Box> : null}
       </Flex>
     </FormModal>
   );
 }
 
-export default MovieForm;
+export default UpdateMovie;

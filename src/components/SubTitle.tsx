@@ -4,7 +4,7 @@ interface Subtitle {
 }
 
 const SubTitle = ({ subTitle }: Subtitle) => {
-  return <h2 className="text-2xl mb-4">{subTitle}</h2>;
+  return <h2 className="text-2xl mb-2">{subTitle}</h2>;
 };
 
 export default SubTitle;

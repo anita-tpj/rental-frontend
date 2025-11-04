@@ -1,19 +1,13 @@
 import { Checkbox, Flex, TextField } from "@radix-ui/themes";
 import { useRef, useState } from "react";
-import useAddCustomer from "../../hooks/customers/useAddCustomer";
+import useUpdateCustomer from "../../hooks/customers/useUpdateCustomer copy";
 import FormModal from "../FormModal";
+import { Customer } from "../../services/customerService";
 
-const CustomerForm = () => {
+const UpdateCustomer = ({ customer }: { customer: Customer }) => {
   const refName = useRef<HTMLInputElement>(null);
   const refPhone = useRef<HTMLInputElement>(null);
   const [isGold, setIsGold] = useState(false);
-
-  const onAdd = () => {
-    if (refName.current) refName.current.value = "";
-    if (refPhone.current) refPhone.current.value = "";
-
-    setIsGold(false);
-  };
 
   const onSubmit = (event: HTMLFormElement) => {
     event.preventDefault();
@@ -21,20 +15,31 @@ const CustomerForm = () => {
       console.error("Fields are required");
       return;
     }
-    addCustomer.mutate({
-      name: refName.current?.value,
-      phone: refPhone.current?.value,
-      isGold,
+    updateCustomer.mutate({
+      id: customer._id!,
+      data: {
+        name: refName.current?.value,
+        phone: refPhone.current?.value,
+        isGold,
+      },
     });
   };
 
-  const addCustomer = useAddCustomer(onAdd);
+  const updateCustomer = useUpdateCustomer();
 
   return (
-    <FormModal name="Add new customer" onSubmit={onSubmit}>
+    <FormModal name="Update customer" onSubmit={onSubmit}>
       <Flex gap="4" direction="column">
-        <TextField.Root ref={refName} placeholder="Type name" />
-        <TextField.Root ref={refPhone} placeholder="Type phone" />
+        <TextField.Root
+          ref={refName}
+          defaultValue={customer.name}
+          placeholder="Type name"
+        />
+        <TextField.Root
+          ref={refPhone}
+          defaultValue={customer.phone}
+          placeholder="Type phone"
+        />
         <Flex gap="2" align="center">
           <Checkbox
             checked={isGold}
@@ -47,4 +52,4 @@ const CustomerForm = () => {
   );
 };
 
-export default CustomerForm;
+export default UpdateCustomer;

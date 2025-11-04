@@ -28,19 +28,19 @@ class APIClient<TResponse, TRequest = TResponse> {
       .then((res) => res.data);
   };
 
-  // get = (id: string) => {
-  //   return axiosInstance.get(this.endpoint + "/" + id).then((res) => res.data);
-  // };
+  get = (id: string) => {
+    return axiosInstance.get<TResponse>(this.endpoint + "/" + id).then((res) => res.data);
+  };
 
   post = (data: TRequest) => {
     return axiosInstance.post<TResponse>(this.endpoint, data).then((res) => res.data);
   };
 
-  // put = (id: string, data: T) => {
-  //   return axiosInstance
-  //     .put<T>(this.endpoint + "/" + id, data)
-  //     .then((res) => res.data);
-  // };
+  put = (id: string, data: TRequest) => {
+    return axiosInstance
+      .put<TResponse>(this.endpoint + "/" + id, data)
+      .then((res) => res.data);
+  };
 
   delete = (id: string) => {
     return axiosInstance.delete<TResponse>(this.endpoint + "/" + id).then((res) => res.data);

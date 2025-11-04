@@ -11,28 +11,23 @@ const MoviesPage = () => {
   const { isAuthed } = useAuthCtx();
 
   return (
-    <Flex
-      gap="9"
-      justify="between"
-      direction={{ initial: "column", md: "row" }}
-    >
-      <Box width={{ initial: "100%", md: "55%" }}>
+    <>
+      <Flex
+        justify="between"
+        align="center"
+        className="border-b border-b-indigo-500 mb-5"
+      >
         <SubTitle subTitle="Movies" />
-        <GenreSelect
-          value={selectedGenre}
-          onChange={(genre) => setSelectedGenre(genre)}
-        />
-        <MoviesList selectedGenre={selectedGenre} />
-      </Box>
-      {isAuthed ? (
-        <Box width={{ initial: "100%", md: "45%" }}>
-          <MovieForm />
-        </Box>
-      ) : null}
-
+        {isAuthed ? <MovieForm /> : null}
+      </Flex>
+      <GenreSelect
+        value={selectedGenre}
+        onChange={(genre) => setSelectedGenre(genre)}
+      />
+      <MoviesList selectedGenre={selectedGenre} isAuthed={isAuthed} />
       {/* <Link to="/movies/new">Add new movie to list</Link>
       <Outlet /> */}
-    </Flex>
+    </>
   );
 };
 
