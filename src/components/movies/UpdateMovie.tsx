@@ -7,9 +7,15 @@ import FormModal from "../FormModal";
 import GenreSelect from "../genres/GenreSelect";
 
 function UpdateMovie({ movie }: { movie: Movie }) {
-  const [selectedGenre, setSelectedGenre] = useState<string>();
-  const [stock, setStock] = useState("");
-  const [rate, setRate] = useState("");
+  const [selectedGenre, setSelectedGenre] = useState<string | undefined>(
+    movie.genreId ?? movie.genreId ?? undefined
+  );
+  const [stock, setStock] = useState<string | undefined>(
+    movie.numberInStock != null ? String(movie.numberInStock) : undefined
+  );
+  const [rate, setRate] = useState<string | undefined>(
+    movie.dailyRentalRate != null ? String(movie.dailyRentalRate) : undefined
+  );
   const refTitle = useRef<HTMLInputElement>(null);
 
   const onSubmit = (event: HTMLFormElement) => {
@@ -54,12 +60,7 @@ function UpdateMovie({ movie }: { movie: Movie }) {
           value={selectedGenre}
           onChange={(genre) => setSelectedGenre(genre)}
         />
-        <Select.Root
-          size="3"
-          value={stock}
-          onValueChange={setStock}
-          defaultValue={movie.numberInStock}
-        >
+        <Select.Root size="3" value={stock} onValueChange={setStock}>
           <Select.Trigger placeholder="Select stock" />
           <Select.Content>
             {[...Array(10)].map((_, i) => (
@@ -69,12 +70,7 @@ function UpdateMovie({ movie }: { movie: Movie }) {
             ))}
           </Select.Content>
         </Select.Root>
-        <Select.Root
-          size="3"
-          value={rate}
-          onValueChange={setRate}
-          defaultValue={movie.dailyRentalRate}
-        >
+        <Select.Root size="3" value={rate} onValueChange={setRate}>
           <Select.Trigger placeholder="Select rate" />
           <Select.Content>
             {[...Array(10)].map((_, r) => (

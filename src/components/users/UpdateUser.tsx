@@ -8,7 +8,7 @@ export const UpdateUser = ({ user }: { user: User }) => {
   const refName = useRef<HTMLInputElement>(null);
   const refEmail = useRef<HTMLInputElement>(null);
   const refPassword = useRef<HTMLInputElement>(null);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(user.isAdmin ?? false);
   const onSubmit = (event: HTMLFormElement) => {
     event.preventDefault();
     if (
@@ -37,17 +37,16 @@ export const UpdateUser = ({ user }: { user: User }) => {
         <TextField.Root
           ref={refName}
           defaultValue={user.userName}
-          placeholder="Type name"
+          placeholder="Type new name"
         />
         <TextField.Root
           ref={refEmail}
           defaultValue={user.email}
-          placeholder="Type email"
+          placeholder="Type new email"
         />
         <TextField.Root
           ref={refPassword}
-          defaultValue={user.password}
-          placeholder="Type password"
+          placeholder="Type new password"
         />
         <Flex gap="2" align="center">
           <Checkbox

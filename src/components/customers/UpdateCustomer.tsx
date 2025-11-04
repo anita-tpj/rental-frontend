@@ -7,7 +7,7 @@ import { Customer } from "../../services/customerService";
 const UpdateCustomer = ({ customer }: { customer: Customer }) => {
   const refName = useRef<HTMLInputElement>(null);
   const refPhone = useRef<HTMLInputElement>(null);
-  const [isGold, setIsGold] = useState(false);
+  const [isGold, setIsGold] = useState(customer.isGold ?? false);
 
   const onSubmit = (event: HTMLFormElement) => {
     event.preventDefault();
