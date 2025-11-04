@@ -9,7 +9,7 @@ export const useAddGenre = (onAdd: () => void) => {
         mutationFn:genreService.post,
         onSuccess:() => {
             queryClient.invalidateQueries({ queryKey: CACHE_KEY_GENRES })
-            onAdd()
+            onAdd();
         }
     })
   

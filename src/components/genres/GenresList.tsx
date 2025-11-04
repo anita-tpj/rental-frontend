@@ -33,7 +33,7 @@ const GenresList = ({ isAuthed }: TGenreList) => {
                 >
                   Delete
                 </Button>
-                <UpdateGenre genreId={genre._id!} />
+                <UpdateGenre genre={genre} />
               </Flex>
             ) : null}
           </Flex>

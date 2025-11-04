@@ -1,14 +1,21 @@
 import { Button, Dialog, Flex } from "@radix-ui/themes";
 import { ReactNode } from "react";
 type TFormModal = {
-  name?: string;
+  name: string;
   description?: string;
   children: ReactNode;
-  onSubmit: (event: HTMLFormElement) => void;
+  onSubmit: () => void;
+  disabled: boolean;
   className?: string;
 };
 
-const FormModal = ({ name, description, children, onSubmit }: TFormModal) => {
+const FormModal = ({
+  name,
+  description,
+  children,
+  onSubmit,
+  disabled,
+}: TFormModal) => {
   return (
     <Dialog.Root>
       <Dialog.Trigger>
@@ -28,7 +35,9 @@ const FormModal = ({ name, description, children, onSubmit }: TFormModal) => {
               </Button>
             </Dialog.Close>
             <Dialog.Close>
-              <Button type="submit">{name}</Button>
+              <Button disabled={disabled} type="submit">
+                {name}
+              </Button>
             </Dialog.Close>
           </Flex>
         </form>

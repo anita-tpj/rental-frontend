@@ -1,34 +1,56 @@
-import { Flex, TextField } from "@radix-ui/themes";
-import { useRef } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Text, TextField } from "@radix-ui/themes";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import useUpdateGenre from "../../hooks/genres/useUpdateGenre";
+import { Genre } from "../../services/genreService";
 import FormModal from "../FormModal";
 
-type TUpdateGenre = {
-  genreId: string;
-};
+const Schema = z.object({
+  name: z.string().min(5, "The genre name must be at least 5 characters long"),
+});
 
-export const UpdateGenre = ({ genreId }: TUpdateGenre) => {
-  const ref = useRef<HTMLInputElement>(null);
+type FormData = z.infer<typeof Schema>;
 
-  const onSubmit = (event: HTMLFormElement) => {
-    event.preventDefault();
-    updateGenre.mutate({
-      id: genreId,
-      data: { name: ref.current?.value || "" },
-    });
+export const UpdateGenre = ({ genre }: { genre: Genre }) => {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isValid },
+  } = useForm<FormData>({
+    resolver: zodResolver(Schema),
+    defaultValues: { name: genre.name },
+    mode: "onChange",
+  });
+
+  const onUpdate = () => {
+    //reset();
   };
 
-  const updateGenre = useUpdateGenre();
+  const onSubmit = (data: Genre) => {
+    updateGenre.mutate({ id: genre._id!, data });
+  };
+
+  const updateGenre = useUpdateGenre(onUpdate);
   return (
-    <FormModal name="Update" description={"Update genre"} onSubmit={onSubmit}>
-      <Flex gap="4" align="center">
-        <TextField.Root
-          className="grow"
-          ref={ref}
-          size="3"
-          placeholder="Type genre..."
-        />
-      </Flex>
+    <FormModal
+      name="Update"
+      description={"Update genre"}
+      onSubmit={handleSubmit(onSubmit)}
+      disabled={!isValid || updateGenre.isPending}
+    >
+      <TextField.Root
+        {...register("name")}
+        className="grow"
+        size="3"
+        placeholder="Type genre..."
+      />
+      {errors.name && (
+        <Text color="red" size="2">
+          *{errors.name.message}
+        </Text>
+      )}
     </FormModal>
   );
 };
