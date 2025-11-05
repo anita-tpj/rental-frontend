@@ -18,7 +18,7 @@ const Layout = () => {
   };
 
   return (
-    <Flex direction="column">
+    <Flex direction="column" className="bg-indigo-100 min-h-screen">
       <Box className=" border-b mb-6 text-white bg-indigo-500 p-6">
         <Flex justify="between">
           <h1 className="text-3xl font-bold">Vidly Rental App</h1>
