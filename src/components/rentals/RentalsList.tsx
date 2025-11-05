@@ -52,7 +52,7 @@ const RentalsList = () => {
               </div>
             </Flex>
             <Flex gap="2">
-              <UpdateRental rental={rental} />
+              {/* <UpdateRental rental={rental} /> */}
               <ReturnRental rental={rental} />
             </Flex>
           </Flex>
