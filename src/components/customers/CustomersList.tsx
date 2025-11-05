@@ -34,18 +34,18 @@ export const CustomersList = () => {
               <p>is Gold: {customer.isGold ? "Yes" : "No"}</p>
               <p>ID: {customer._id}</p>
             </Box>
-            <Box>
+            <Flex direction="column">
               <RentalFormCustomers
                 customerId={customer._id!}
                 customerName={customer.name}
               />
-              <Flex gap="2" className="mt-4">
+              <Flex gap="2" className="mt-2">
                 <UpdateCustomer customer={customer} />
                 <DeleteItem
                   onDelete={() => deleteCustomer.mutate(customer._id!)}
                 />
               </Flex>
-            </Box>
+            </Flex>
           </Flex>
         </Card>
       ))}

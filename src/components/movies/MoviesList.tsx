@@ -39,16 +39,16 @@ const MoviesList = ({ selectedGenre, isAuthed }: MoviesListProps) => {
               <p>ID: {movie._id}</p>
             </div>
             {isAuthed ? (
-              <Box>
+              <Flex direction="column">
                 <RentalFormMovies
                   movieId={movie._id!}
                   movieTitle={movie.title}
                 />
-                <Flex gap="2" className="mt-4">
+                <Flex gap="2" className="mt-2">
                   <UpdateMovie movie={movie} />
                   <DeleteItem onDelete={() => deleteMovie.mutate(movie._id!)} />
                 </Flex>
-              </Box>
+              </Flex>
             ) : null}
           </Flex>
         </Card>
