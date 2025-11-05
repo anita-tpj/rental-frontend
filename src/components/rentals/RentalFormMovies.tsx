@@ -7,9 +7,13 @@ import FormModal from "../FormModal";
 import { RentalFormData, RentalSchema } from "./schema";
 import ErrorMessage from "../ErrorMessage";
 import CustomerSelect from "../CustomerSelect";
-import MovieSelect from "../MovieSelect";
 
-const RentalForm = () => {
+interface RentalFormCustomerProps {
+  movieId: string;
+  movieTitle: string;
+}
+
+const RentalFormMovies = ({ movieId, movieTitle }: RentalFormCustomerProps) => {
   const {
     register,
     handleSubmit,
@@ -33,12 +37,22 @@ const RentalForm = () => {
 
   return (
     <FormModal
-      name="Open new rental"
-      action="add"
+      name="Open new rental for movie:"
+      action="rent"
       onSubmit={handleSubmit(onSubmit)}
       disabled={!isValid || addRental.isPending}
     >
       <Flex gap="4" direction="column">
+        <Box hidden>
+          <TextField.Root
+            {...register("movieId")}
+            placeholder="Type movie ID"
+            value={movieId}
+          />
+        </Box>
+        <Box>
+          <TextField.Root value={movieTitle} />
+        </Box>
         <Controller
           control={control}
           name="customerId"
@@ -51,28 +65,9 @@ const RentalForm = () => {
             </>
           )}
         />
-        {errors.customerId && (
-          <ErrorMessage errorMessage={errors.customerId.message ?? ""} />
-        )}
-
-        <Controller
-          control={control}
-          name="movieId"
-          render={({ field: { value, onChange } }) => (
-            <>
-              <MovieSelect value={value} onChange={onChange} />
-              {errors.movieId && (
-                <ErrorMessage errorMessage={errors.movieId.message ?? ""} />
-              )}
-            </>
-          )}
-        />
-        {errors.movieId && (
-          <ErrorMessage errorMessage={errors.movieId.message ?? ""} />
-        )}
       </Flex>
     </FormModal>
   );
 };
 
-export default RentalForm;
+export default RentalFormMovies;

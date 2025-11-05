@@ -7,6 +7,7 @@ import { useAuthCtx } from "../context/AuthContext";
 
 const Layout = () => {
   const { isAuthed, setIsAuthed } = useAuthCtx();
+  
 
   const handleLogOut = () => {
     localStorage.removeItem("token");

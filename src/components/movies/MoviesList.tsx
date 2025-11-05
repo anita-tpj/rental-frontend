@@ -1,7 +1,8 @@
-import { Card, Flex, Spinner } from "@radix-ui/themes";
+import { Box, Card, Flex, Spinner } from "@radix-ui/themes";
 import useDeleteMovie from "../../hooks/movies/useDeleteMovie";
 import useMovies from "../../hooks/movies/useMovies";
 import DeleteItem from "../DeleteItem";
+import RentalFormMovies from "../rentals/RentalFormMovies";
 import UpdateMovie from "./UpdateMovie";
 
 interface MoviesListProps {
@@ -38,10 +39,16 @@ const MoviesList = ({ selectedGenre, isAuthed }: MoviesListProps) => {
               <p>ID: {movie._id}</p>
             </div>
             {isAuthed ? (
-              <Flex gap="2">
-                <UpdateMovie movie={movie} />
-                <DeleteItem onDelete={() => deleteMovie.mutate(movie._id!)} />
-              </Flex>
+              <Box>
+                <RentalFormMovies
+                  movieId={movie._id!}
+                  movieTitle={movie.title}
+                />
+                <Flex gap="2" className="mt-4">
+                  <UpdateMovie movie={movie} />
+                  <DeleteItem onDelete={() => deleteMovie.mutate(movie._id!)} />
+                </Flex>
+              </Box>
             ) : null}
           </Flex>
         </Card>

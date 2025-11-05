@@ -3,6 +3,8 @@ import useCustomers from "../../hooks/customers/useCustomers";
 import useDeleteCustomer from "../../hooks/customers/useDeleteCustomer";
 import DeleteItem from "../DeleteItem";
 import UpdateCustomer from "./UpdateCustomer";
+import RentalFormCustomer from "../rentals/RentalFormMovies";
+import RentalFormCustomers from "../rentals/RentalFormCustomers";
 
 export const CustomersList = () => {
   const { data, error, isLoading } = useCustomers();
@@ -32,12 +34,18 @@ export const CustomersList = () => {
               <p>is Gold: {customer.isGold ? "Yes" : "No"}</p>
               <p>ID: {customer._id}</p>
             </Box>
-            <Flex gap="2">
-              <UpdateCustomer customer={customer} />
-              <DeleteItem
-                onDelete={() => deleteCustomer.mutate(customer._id!)}
+            <Box>
+              <RentalFormCustomers
+                customerId={customer._id!}
+                customerName={customer.name}
               />
-            </Flex>
+              <Flex gap="2" className="mt-4">
+                <UpdateCustomer customer={customer} />
+                <DeleteItem
+                  onDelete={() => deleteCustomer.mutate(customer._id!)}
+                />
+              </Flex>
+            </Box>
           </Flex>
         </Card>
       ))}

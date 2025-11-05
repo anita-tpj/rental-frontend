@@ -3,13 +3,20 @@ import { Box, Flex, TextField } from "@radix-ui/themes";
 import { Controller, useForm } from "react-hook-form";
 import useAddRental from "../../hooks/rentals/useAddRental";
 import { NewRental } from "../../services/rentalService";
-import FormModal from "../FormModal";
-import { RentalFormData, RentalSchema } from "./schema";
 import ErrorMessage from "../ErrorMessage";
-import CustomerSelect from "../CustomerSelect";
+import FormModal from "../FormModal";
 import MovieSelect from "../MovieSelect";
+import { RentalFormData, RentalSchema } from "./schema";
 
-const RentalForm = () => {
+interface RentalFormCustomerProps {
+  customerId: string;
+  customerName: string;
+}
+
+const RentalFormCustomers = ({
+  customerId,
+  customerName,
+}: RentalFormCustomerProps) => {
   const {
     register,
     handleSubmit,
@@ -33,28 +40,18 @@ const RentalForm = () => {
 
   return (
     <FormModal
-      name="Open new rental"
-      action="add"
+      name="Open new rental for customer:"
+      action="rent"
       onSubmit={handleSubmit(onSubmit)}
       disabled={!isValid || addRental.isPending}
     >
       <Flex gap="4" direction="column">
-        <Controller
-          control={control}
-          name="customerId"
-          render={({ field: { value, onChange } }) => (
-            <>
-              <CustomerSelect value={value} onChange={onChange} />
-              {errors.customerId && (
-                <ErrorMessage errorMessage={errors.customerId.message ?? ""} />
-              )}
-            </>
-          )}
-        />
-        {errors.customerId && (
-          <ErrorMessage errorMessage={errors.customerId.message ?? ""} />
-        )}
-
+        <Box hidden>
+          <TextField.Root {...register("customerId")} value={customerId} />
+        </Box>
+        <Box>
+          <TextField.Root value={customerName} />
+        </Box>
         <Controller
           control={control}
           name="movieId"
@@ -67,12 +64,9 @@ const RentalForm = () => {
             </>
           )}
         />
-        {errors.movieId && (
-          <ErrorMessage errorMessage={errors.movieId.message ?? ""} />
-        )}
       </Flex>
     </FormModal>
   );
 };
 
-export default RentalForm;
+export default RentalFormCustomers;

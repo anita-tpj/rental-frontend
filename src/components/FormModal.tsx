@@ -1,10 +1,11 @@
 import { UpdateIcon } from "@radix-ui/react-icons";
 import { Button, Dialog, Flex } from "@radix-ui/themes";
 import { ReactNode } from "react";
+import { toUpperCase } from "zod";
 
 type TFormModal = {
   name: string;
-  action: "add" | "update";
+  action: "add" | "update" | "rent" | "return";
   description?: string;
   children: ReactNode;
   onSubmit: React.FormEventHandler<HTMLFormElement>;
@@ -23,7 +24,15 @@ const FormModal = ({
   return (
     <Dialog.Root>
       <Dialog.Trigger>
-        <Button>{action === "update" ? <UpdateIcon /> : name}</Button>
+        <Button>
+          {action === "rent" || action === "return" ? (
+            action.toUpperCase()
+          ) : action === "update" ? (
+            <UpdateIcon />
+          ) : (
+            name
+          )}
+        </Button>
       </Dialog.Trigger>
       <Dialog.Content maxWidth="450px">
         <Dialog.Title>{name}</Dialog.Title>
@@ -40,7 +49,9 @@ const FormModal = ({
             </Dialog.Close>
             <Dialog.Close>
               <Button disabled={disabled} type="submit">
-                {name}
+                {action === "rent" || action === "return"
+                  ? action.toUpperCase()
+                  : name}
               </Button>
             </Dialog.Close>
           </Flex>

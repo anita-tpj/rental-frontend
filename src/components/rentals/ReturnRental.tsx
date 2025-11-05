@@ -29,28 +29,30 @@ const RetutnRental = ({ rental }: { rental: Rental }) => {
 
   return (
     <FormModal
+      action="return"
       name="Return rental"
       onSubmit={handleSubmit(onSubmit)}
       disabled={!isValid || returnRental.isPending}
     >
       <Flex gap="4" direction="column">
-        <Box>
-          <TextField.Root
-            {...register("customerId")}
-            placeholder="Type customer ID"
-          />
+        <Box hidden>
+          <TextField.Root {...register("customerId")} />
           {errors.customerId && (
             <ErrorMessage errorMessage={errors.customerId.message ?? ""} />
           )}
         </Box>
         <Box>
-          <TextField.Root
-            {...register("movieId")}
-            placeholder="Type movie ID"
-          />
+          <TextField.Root value={rental.customer.name} />
+        </Box>
+        <Box hidden>
+          <TextField.Root {...register("movieId")} />
           {errors.movieId && (
             <ErrorMessage errorMessage={errors.movieId.message ?? ""} />
           )}
+        </Box>
+
+        <Box>
+          <TextField.Root value={rental.movie.title} />
         </Box>
       </Flex>
     </FormModal>
