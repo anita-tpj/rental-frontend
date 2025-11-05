@@ -1,16 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Text, TextField } from "@radix-ui/themes";
+import { TextField } from "@radix-ui/themes";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import useAddGenre from "../../hooks/genres/useAddGenre";
 import { Genre } from "../../services/genreService";
+import ErrorMessage from "../ErrorMessage";
 import FormModal from "../FormModal";
-
-const Schema = z.object({
-  name: z.string().min(5),
-});
-
-type FormData = z.infer<typeof Schema>;
+import { GenreFormData, GenreSchema } from "./schema";
 
 export const GenreForm = () => {
   const {
@@ -18,8 +13,9 @@ export const GenreForm = () => {
     handleSubmit,
     reset,
     formState: { errors, isValid },
-  } = useForm<FormData>({
-    resolver: zodResolver(Schema),
+  } = useForm<GenreFormData>({
+    resolver: zodResolver(GenreSchema),
+    mode: "onChange",
   });
 
   const onAdd = () => {
@@ -34,6 +30,7 @@ export const GenreForm = () => {
   return (
     <FormModal
       name="Add new genre"
+      action="add"
       onSubmit={handleSubmit(onSubmit)}
       disabled={!isValid || addGenre.isPending}
     >
@@ -43,11 +40,7 @@ export const GenreForm = () => {
         size="3"
         placeholder="Type genre..."
       />
-      {errors.name && (
-        <Text color="red" size="2">
-          *{errors.name.message}
-        </Text>
-      )}
+      {errors.name && <ErrorMessage errorMessage={errors.name.message ?? ""} />}
     </FormModal>
   );
 };

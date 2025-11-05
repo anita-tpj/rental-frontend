@@ -1,51 +1,73 @@
-import { Checkbox, Flex, TextField } from "@radix-ui/themes";
-import { useRef, useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Box, Checkbox, Flex, TextField } from "@radix-ui/themes";
+import { Controller, useForm } from "react-hook-form";
 import useAddUser from "../../hooks/users/useAddUser";
+import { User } from "../../services/userService";
+import ErrorMessage from "../ErrorMessage";
 import FormModal from "../FormModal";
+import { UserFormData, UserSchema } from "./schema";
 
 const UserForm = () => {
-  const refName = useRef<HTMLInputElement>(null);
-  const refEmail = useRef<HTMLInputElement>(null);
-  const refPassword = useRef<HTMLInputElement>(null);
-  const [isAdmin, setIsAdmin] = useState(false);
-
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors, isValid },
+  } = useForm<UserFormData>({
+    resolver: zodResolver(UserSchema),
+    mode: "onChange",
+    defaultValues: { email: "", password: "", isAdmin: false },
+  });
   const onAdd = () => {
-    if (refEmail.current) refEmail.current.value = "";
-    if (refPassword.current) refPassword.current.value = "";
-    if (refName.current) refName.current.value = "";
-    setIsAdmin(false);
+    reset();
   };
 
-  const onSubmit = (event: HTMLFormElement) => {
-    event.preventDefault();
-    if (
-      !refName.current?.value ||
-      !refEmail.current?.value ||
-      !refPassword.current?.value
-    ) {
-      console.error("Fields are required");
-      return;
-    }
-    addUser.mutate({
-      userName: refName.current?.value,
-      email: refEmail.current?.value,
-      password: refPassword.current?.value,
-      isAdmin,
-    });
+  const onSubmit = (data: User) => {
+    addUser.mutate(data);
   };
 
   const addUser = useAddUser(onAdd);
 
   return (
-    <FormModal name="Add new user" onSubmit={onSubmit}>
+    <FormModal
+      name="Add new user"
+      action="add"
+      onSubmit={handleSubmit(onSubmit)}
+      disabled={!isValid || addUser.isPending}
+    >
       <Flex gap="4" direction="column">
-        <TextField.Root ref={refName} placeholder="Type name" />
-        <TextField.Root ref={refEmail} placeholder="Type email" />
-        <TextField.Root ref={refPassword} placeholder="Type password" />
+        <Box>
+          <TextField.Root {...register("userName")} placeholder="Type name" />
+          {errors.userName && (
+            <ErrorMessage errorMessage={errors.userName.message ?? ""} />
+          )}
+        </Box>
+        <Box>
+          <TextField.Root {...register("email")} placeholder="Type email" />
+          {errors.email && (
+            <ErrorMessage errorMessage={errors.email.message ?? ""} />
+          )}
+        </Box>
+        <Box>
+          <TextField.Root
+            {...register("password")}
+            placeholder="Type password"
+          />
+          {errors.password && (
+            <ErrorMessage errorMessage={errors.password.message ?? ""} />
+          )}
+        </Box>
         <Flex gap="2" align="center">
-          <Checkbox
-            checked={isAdmin}
-            onCheckedChange={(checked) => setIsAdmin(checked === true)}
+          <Controller
+            control={control}
+            name="isAdmin"
+            render={({ field: { value, onChange } }) => (
+              <Checkbox
+                checked={value}
+                onCheckedChange={(v) => onChange(v === true)}
+              />
+            )}
           />
           Admin rule
         </Flex>

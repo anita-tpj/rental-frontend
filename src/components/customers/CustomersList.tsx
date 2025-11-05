@@ -1,6 +1,7 @@
-import { Box, Button, Card, Flex } from "@radix-ui/themes";
+import { Box, Card, Flex } from "@radix-ui/themes";
 import useCustomers from "../../hooks/customers/useCustomers";
 import useDeleteCustomer from "../../hooks/customers/useDeleteCustomer";
+import DeleteItem from "../DeleteItem";
 import UpdateCustomer from "./UpdateCustomer";
 
 export const CustomersList = () => {
@@ -27,14 +28,10 @@ export const CustomersList = () => {
               <p>ID: {customer._id}</p>
             </Box>
             <Flex gap="2">
-              <Button
-                onClick={() => {
-                  deleteCustomer.mutate(customer._id!);
-                }}
-              >
-                Delete
-              </Button>
               <UpdateCustomer customer={customer} />
+              <DeleteItem
+                onDelete={() => deleteCustomer.mutate(customer._id!)}
+              />
             </Flex>
           </Flex>
         </Card>

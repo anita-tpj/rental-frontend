@@ -7,15 +7,9 @@ interface GenreSelectProps {
 }
 
 const GenreSelect = ({ value, onChange }: GenreSelectProps) => {
-  const { data, error, isLoading } = useGenres();
-
-  if (isLoading) return <p>Loading...</p>;
-  if (error)
-    return (
-      <p>
-        Error loading genres 😢 <br /> {error.message}
-      </p>
-    );
+  const { data, error } = useGenres();
+  
+  if (error) return;
 
   return (
     <Select.Root size="3" value={value} onValueChange={onChange}>

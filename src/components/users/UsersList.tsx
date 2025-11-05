@@ -1,6 +1,7 @@
-import { Box, Button, Card, Flex } from "@radix-ui/themes";
+import { Box, Card, Flex } from "@radix-ui/themes";
 import useDeleteUser from "../../hooks/users/useDeleteUser";
 import useUsers from "../../hooks/users/useUsers";
+import DeleteItem from "../DeleteItem";
 import UpdateUser from "./UpdateUser";
 
 const UsersList = () => {
@@ -24,16 +25,10 @@ const UsersList = () => {
               <p>Email: {user.email}</p>
               <p>Admin: {user.isAdmin ? "Yes" : "No"}</p>
             </Box>
-            <Flex gap="2">
-              <Button
-                onClick={() => {
-                  deleteUser.mutate(user._id!);
-                }}
-              >
-                Delete
-              </Button>
+            {/* <Flex gap="2">
               <UpdateUser user={user} />
-            </Flex>
+              <DeleteItem onDelete={() => deleteUser.mutate(user._id!)} />
+            </Flex> */}
           </Flex>
         </Card>
       ))}

@@ -4,7 +4,7 @@ export interface Customer {
     _id?: string;
     name: string;
     phone: string;
-    isGold: boolean
+    isGold?: boolean
 }
 
 export default new APIClient<Customer>("/customers")

@@ -1,6 +1,7 @@
-import { Box, Button, Card, Flex } from "@radix-ui/themes";
-import useGenres from "../../hooks/genres/useGenres";
+import { Box, Card, Flex } from "@radix-ui/themes";
 import useDeleteGenre from "../../hooks/genres/useDeleteGenre";
+import useGenres from "../../hooks/genres/useGenres";
+import DeleteItem from "../DeleteItem";
 import UpdateGenre from "./UpdateGenre";
 
 type TGenreList = {
@@ -26,14 +27,8 @@ const GenresList = ({ isAuthed }: TGenreList) => {
             {genre.name}
             {isAuthed ? (
               <Flex gap="2">
-                <Button
-                  onClick={() => {
-                    deleteGenre.mutate(genre._id!);
-                  }}
-                >
-                  Delete
-                </Button>
                 <UpdateGenre genre={genre} />
+                <DeleteItem onDelete={() => deleteGenre.mutate(genre._id!)} />
               </Flex>
             ) : null}
           </Flex>

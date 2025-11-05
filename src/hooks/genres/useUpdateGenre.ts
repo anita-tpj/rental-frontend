@@ -7,14 +7,13 @@ interface UpdateGenre {
   data: Genre;
 }
 
-export const useUpdateGenre = (onUpdate: ()=>void) => {
+export const useUpdateGenre = () => {
     const queryClient = useQueryClient();
     
     return useMutation<Genre, Error, UpdateGenre>({
         mutationFn: ({ id, data }) => genreService.put(id, data),
         onSuccess:() => {
             queryClient.invalidateQueries({ queryKey: CACHE_KEY_GENRES })
-            onUpdate()
         }
     })
   

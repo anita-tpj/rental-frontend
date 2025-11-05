@@ -1,93 +1,120 @@
-import { Flex, Select, TextArea, TextField } from "@radix-ui/themes";
+import { Flex, Select, TextField } from "@radix-ui/themes";
 import { Box } from "@radix-ui/themes/src/index.js";
-import { useRef, useState } from "react";
 import useUpdateMovie from "../../hooks/movies/useUpdateMovie";
 import { Movie } from "../../services/movieService";
 import FormModal from "../FormModal";
 import GenreSelect from "../genres/GenreSelect";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { MovieFormData, MovieSchema } from "./schema";
+import ErrorMessage from "../ErrorMessage";
 
 function UpdateMovie({ movie }: { movie: Movie }) {
-  const [selectedGenre, setSelectedGenre] = useState<string | undefined>(
-    movie.genreId ?? movie.genreId ?? undefined
-  );
-  const [stock, setStock] = useState<string | undefined>(
-    movie.numberInStock != null ? String(movie.numberInStock) : undefined
-  );
-  const [rate, setRate] = useState<string | undefined>(
-    movie.dailyRentalRate != null ? String(movie.dailyRentalRate) : undefined
-  );
-  const refTitle = useRef<HTMLInputElement>(null);
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors, isValid },
+  } = useForm<MovieFormData>({
+    resolver: zodResolver(MovieSchema),
+    mode: "onChange",
+    defaultValues: {
+      title: movie.title,
+      dailyRentalRate: movie.dailyRentalRate,
+      numberInStock: movie.numberInStock,
+      genreId: movie.genreId,
+    },
+  });
 
-  const onSubmit = (event: HTMLFormElement) => {
-    event.preventDefault();
-    const title = refTitle.current!.value.trim();
-    const numberInStock = Number(stock);
-    const dailyRentalRate = Number(rate);
-
-    if (!title) {
-      console.error("Title is required");
-      return;
-    }
-
-    if (!selectedGenre) {
-      console.error("Genre is required");
-      return;
-    }
-
+  const onSubmit = (data: Movie) => {
     updateMovie.mutate({
       id: movie._id!,
-      data: {
-        title,
-        numberInStock,
-        dailyRentalRate,
-        genreId: selectedGenre,
-      },
+      data,
     });
   };
 
   const updateMovie = useUpdateMovie();
 
   return (
-    <FormModal name="Update movie" onSubmit={onSubmit}>
+    <FormModal
+      name="Update movie"
+      action="update"
+      onSubmit={handleSubmit(onSubmit)}
+      disabled={!isValid || updateMovie.isPending}
+    >
       <Flex direction="column" gap="3">
-        <TextField.Root
-          ref={refTitle}
-          defaultValue={movie.title}
-          size="3"
-          placeholder="Type title"
+        <Box>
+          <TextField.Root
+            {...register("title")}
+            size="3"
+            placeholder="Type title"
+          />
+          {errors.title && (
+            <ErrorMessage errorMessage={errors.title.message ?? ""} />
+          )}
+        </Box>
+        <Controller
+          control={control}
+          name="genreId"
+          render={({ field: { value, onChange } }) => (
+            <>
+              <GenreSelect value={value} onChange={onChange} />
+              {errors.genreId && (
+                <ErrorMessage errorMessage={errors.genreId.message ?? ""} />
+              )}
+            </>
+          )}
         />
-        <GenreSelect
-          value={selectedGenre}
-          onChange={(genre) => setSelectedGenre(genre)}
+        {errors.genreId && (
+          <ErrorMessage errorMessage={errors.genreId.message ?? ""} />
+        )}
+        <Controller
+          control={control}
+          name="dailyRentalRate"
+          render={({ field: { value, onChange } }) => (
+            <Select.Root
+              size="3"
+              value={String(value)}
+              onValueChange={onChange}
+            >
+              <Select.Trigger placeholder="Select rate" />
+              <Select.Content>
+                {[...Array(10)].map((_, i) => (
+                  <Select.Item key={i} value={String(i + 1)}>
+                    {i + 1}
+                  </Select.Item>
+                ))}
+              </Select.Content>
+            </Select.Root>
+          )}
         />
-        <Select.Root size="3" value={stock} onValueChange={setStock}>
-          <Select.Trigger placeholder="Select stock" />
-          <Select.Content>
-            {[...Array(10)].map((_, i) => (
-              <Select.Item key={i} value={String(i + 1)}>
-                {i + 1}
-              </Select.Item>
-            ))}
-          </Select.Content>
-        </Select.Root>
-        <Select.Root size="3" value={rate} onValueChange={setRate}>
-          <Select.Trigger placeholder="Select rate" />
-          <Select.Content>
-            {[...Array(10)].map((_, r) => (
-              <Select.Item key={r} value={String(r + 1)}>
-                {r + 1}
-              </Select.Item>
-            ))}
-          </Select.Content>
-        </Select.Root>
-        {/* <TextArea resize="both" placeholder="Type description" /> */}
-        {/* <Box width="auto">
-          <Button size="3" disabled={addMovie.isPending}>
-            {addMovie.isPending ? "SAVING" : "ADD MOVIE"}
-          </Button>
-        </Box> */}
+        {errors.dailyRentalRate && (
+          <ErrorMessage errorMessage={errors.dailyRentalRate.message ?? ""} />
+        )}
 
-        {updateMovie.error ? <Box>{updateMovie.error.message};</Box> : null}
+        <Controller
+          control={control}
+          name="numberInStock"
+          render={({ field: { value, onChange } }) => (
+            <Select.Root
+              size="3"
+              value={String(value)}
+              onValueChange={onChange}
+            >
+              <Select.Trigger placeholder="Select stock" />
+              <Select.Content>
+                {[...Array(10)].map((_, i) => (
+                  <Select.Item key={i} value={String(i + 1)}>
+                    {i + 1}
+                  </Select.Item>
+                ))}
+              </Select.Content>
+            </Select.Root>
+          )}
+        />
+        {errors.numberInStock && (
+          <ErrorMessage errorMessage={errors.numberInStock.message ?? ""} />
+        )}
       </Flex>
     </FormModal>
   );

@@ -1,94 +1,108 @@
-import {
-  Button,
-  Card,
-  Flex,
-  Select,
-  TextArea,
-  TextField,
-} from "@radix-ui/themes";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Flex, Select, TextField } from "@radix-ui/themes";
 import { Box } from "@radix-ui/themes/src/index.js";
-import { useRef, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import useAddMovie from "../../hooks/movies/useAddMovie";
-import GenreSelect from "../genres/GenreSelect";
-import SubTitle from "../SubTitle";
+import { Movie } from "../../services/movieService";
+import ErrorMessage from "../ErrorMessage";
 import FormModal from "../FormModal";
+import GenreSelect from "../genres/GenreSelect";
+import { MovieFormData, MovieSchema } from "./schema";
 
 function MovieForm() {
-  const [selectedGenre, setSelectedGenre] = useState<string>();
-  const [stock, setStock] = useState("");
-  const [rate, setRate] = useState("");
-  const refTitle = useRef<HTMLInputElement>(null);
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors, isValid },
+  } = useForm<MovieFormData>({
+    resolver: zodResolver(MovieSchema),
+    mode: "onChange",
+  });
 
   const onAdd = () => {
-    if (refTitle.current) refTitle.current.value = "";
-
-    setStock("");
-    setRate("");
-    setSelectedGenre("");
+    reset();
   };
 
-  const onSubmit = (event: HTMLFormElement) => {
-    event.preventDefault();
-    const title = refTitle.current!.value.trim();
-    const numberInStock = Number(stock);
-    const dailyRentalRate = Number(rate);
-
-    if (!title) {
-      console.error("Title is required");
-      return;
-    }
-
-    if (!selectedGenre) {
-      console.error("Genre is required");
-      return;
-    }
-
-    addMovie.mutate({
-      title,
-      numberInStock,
-      dailyRentalRate,
-      genreId: selectedGenre,
-    });
+  const onSubmit = (data: Movie) => {
+    addMovie.mutate(data);
   };
 
   const addMovie = useAddMovie(onAdd);
 
   return (
-    <FormModal name="Add new movie" onSubmit={onSubmit}>
+    <FormModal
+      action="add"
+      name="Add new movie"
+      onSubmit={handleSubmit(onSubmit)}
+      disabled={!isValid || addMovie.isPending}
+    >
       <Flex direction="column" gap="3">
-        <TextField.Root ref={refTitle} size="3" placeholder="Type title" />
-        <GenreSelect
-          value={selectedGenre}
-          onChange={(genre) => setSelectedGenre(genre)}
+        <Box>
+          <TextField.Root
+            {...register("title")}
+            size="3"
+            placeholder="Type title"
+          />
+          {errors.title && (
+            <ErrorMessage errorMessage={errors.title.message ?? ""} />
+          )}
+        </Box>
+        <Controller
+          control={control}
+          name="genreId"
+          render={({ field: { value, onChange } }) => (
+            <>
+              <GenreSelect value={value} onChange={onChange} />
+              {errors.genreId && (
+                <ErrorMessage errorMessage={errors.genreId.message ?? ""} />
+              )}
+            </>
+          )}
         />
-        <Select.Root size="3" value={stock} onValueChange={setStock}>
-          <Select.Trigger placeholder="Select stock" />
-          <Select.Content>
-            {[...Array(10)].map((_, i) => (
-              <Select.Item key={i} value={String(i + 1)}>
-                {i + 1}
-              </Select.Item>
-            ))}
-          </Select.Content>
-        </Select.Root>
-        <Select.Root size="3" value={rate} onValueChange={setRate}>
-          <Select.Trigger placeholder="Select rate" />
-          <Select.Content>
-            {[...Array(10)].map((_, r) => (
-              <Select.Item key={r} value={String(r + 1)}>
-                {r + 1}
-              </Select.Item>
-            ))}
-          </Select.Content>
-        </Select.Root>
-        <TextArea resize="both" placeholder="Type description" />
-        {/* <Box width="auto">
-          <Button size="3" disabled={addMovie.isPending}>
-            {addMovie.isPending ? "SAVING" : "ADD MOVIE"}
-          </Button>
-        </Box> */}
+        {errors.genreId && (
+          <ErrorMessage errorMessage={errors.genreId.message ?? ""} />
+        )}
+        <Controller
+          control={control}
+          name="dailyRentalRate"
+          render={({ field: { value, onChange } }) => (
+            <Select.Root size="3" value={value} onValueChange={onChange}>
+              <Select.Trigger placeholder="Select rate" />
+              <Select.Content>
+                {[...Array(10)].map((_, i) => (
+                  <Select.Item key={i} value={String(i + 1)}>
+                    {i + 1}
+                  </Select.Item>
+                ))}
+              </Select.Content>
+            </Select.Root>
+          )}
+        />
+        {errors.dailyRentalRate && (
+          <ErrorMessage errorMessage={errors.dailyRentalRate.message ?? ""} />
+        )}
 
-        {addMovie.error ? <Box>{addMovie.error.message};</Box> : null}
+        <Controller
+          control={control}
+          name="numberInStock"
+          render={({ field: { value, onChange } }) => (
+            <Select.Root size="3" value={value} onValueChange={onChange}>
+              <Select.Trigger placeholder="Select stock" />
+              <Select.Content>
+                {[...Array(10)].map((_, i) => (
+                  <Select.Item key={i} value={String(i + 1)}>
+                    {i + 1}
+                  </Select.Item>
+                ))}
+              </Select.Content>
+            </Select.Root>
+          )}
+        />
+        {errors.numberInStock && (
+          <ErrorMessage errorMessage={errors.numberInStock.message ?? ""} />
+        )}
       </Flex>
     </FormModal>
   );

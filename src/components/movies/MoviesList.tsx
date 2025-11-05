@@ -1,6 +1,7 @@
-import { Button, Card, Flex } from "@radix-ui/themes";
+import { Card, Flex } from "@radix-ui/themes";
 import useDeleteMovie from "../../hooks/movies/useDeleteMovie";
 import useMovies from "../../hooks/movies/useMovies";
+import DeleteItem from "../DeleteItem";
 import UpdateMovie from "./UpdateMovie";
 
 interface MoviesListProps {
@@ -33,10 +34,8 @@ const MoviesList = ({ selectedGenre, isAuthed }: MoviesListProps) => {
             </div>
             {isAuthed ? (
               <Flex gap="2">
-                <Button onClick={() => deleteMovie.mutate(movie._id!)}>
-                  Delete
-                </Button>
                 <UpdateMovie movie={movie} />
+                <DeleteItem onDelete={() => deleteMovie.mutate(movie._id!)} />
               </Flex>
             ) : null}
           </Flex>

@@ -1,44 +1,66 @@
-import { Checkbox, Flex, TextField } from "@radix-ui/themes";
-import { useRef, useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Box, Checkbox, Flex, TextField } from "@radix-ui/themes";
+import { Controller, useForm } from "react-hook-form";
 import useAddCustomer from "../../hooks/customers/useAddCustomer";
+import { Customer } from "../../services/customerService";
+import ErrorMessage from "../ErrorMessage";
 import FormModal from "../FormModal";
+import { CustomerFormData, CustomerSchema } from "./schema";
 
 const CustomerForm = () => {
-  const refName = useRef<HTMLInputElement>(null);
-  const refPhone = useRef<HTMLInputElement>(null);
-  const [isGold, setIsGold] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors, isValid },
+  } = useForm<CustomerFormData>({
+    resolver: zodResolver(CustomerSchema),
+    mode: "onChange",
+    defaultValues: { name: "", phone: "", isGold: false },
+  });
 
   const onAdd = () => {
-    if (refName.current) refName.current.value = "";
-    if (refPhone.current) refPhone.current.value = "";
-
-    setIsGold(false);
+    reset();
   };
 
-  const onSubmit = (event: HTMLFormElement) => {
-    event.preventDefault();
-    if (!refName.current?.value || !refPhone.current?.value) {
-      console.error("Fields are required");
-      return;
-    }
-    addCustomer.mutate({
-      name: refName.current?.value,
-      phone: refPhone.current?.value,
-      isGold,
-    });
+  const onSubmit = (data: Customer) => {
+    addCustomer.mutate(data);
   };
 
   const addCustomer = useAddCustomer(onAdd);
 
   return (
-    <FormModal name="Add new customer" onSubmit={onSubmit}>
+    <FormModal
+      name="Add new customer"
+      action="add"
+      onSubmit={handleSubmit(onSubmit)}
+      disabled={!isValid || addCustomer.isPending}
+    >
       <Flex gap="4" direction="column">
-        <TextField.Root ref={refName} placeholder="Type name" />
-        <TextField.Root ref={refPhone} placeholder="Type phone" />
+        <Box>
+          <TextField.Root {...register("name")} placeholder="Type name" />
+          {errors.name && (
+            <ErrorMessage errorMessage={errors.name.message ?? ""} />
+          )}
+        </Box>
+        <Box>
+          <TextField.Root {...register("phone")} placeholder="Type phone" />
+          {errors.phone && (
+            <ErrorMessage errorMessage={errors.phone.message ?? ""} />
+          )}
+        </Box>
+
         <Flex gap="2" align="center">
-          <Checkbox
-            checked={isGold}
-            onCheckedChange={(checked) => setIsGold(checked === true)}
+          <Controller
+            control={control}
+            name="isGold"
+            render={({ field: { value, onChange } }) => (
+              <Checkbox
+                checked={value}
+                onCheckedChange={(v) => onChange(v === true)}
+              />
+            )}
           />
           Gold customer
         </Flex>

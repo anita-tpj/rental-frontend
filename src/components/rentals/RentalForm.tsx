@@ -1,36 +1,59 @@
-import { Button, Flex, TextField } from "@radix-ui/themes";
-import { useRef } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Box, Flex, TextField } from "@radix-ui/themes";
+import { useForm } from "react-hook-form";
 import useAddRental from "../../hooks/rentals/useAddRental";
+import { NewRental } from "../../services/rentalService";
 import FormModal from "../FormModal";
+import { RentalFormData, RentalSchema } from "./schema";
+import ErrorMessage from "../ErrorMessage";
 
 const RentalForm = () => {
-  const refCustomer = useRef<HTMLInputElement>(null);
-  const refMovie = useRef<HTMLInputElement>(null);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isValid },
+  } = useForm<RentalFormData>({
+    resolver: zodResolver(RentalSchema),
+    mode: "onChange",
+  });
 
   const onAdd = () => {
-    if (refCustomer.current) refCustomer.current.value = "";
-    if (refMovie.current) refMovie.current.value = "";
+    reset();
   };
 
-  const onSubmit = (event: HTMLFormElement) => {
-    event.preventDefault();
-    if (!refCustomer.current?.value || !refMovie.current?.value) {
-      console.error("Fields are required");
-      return;
-    }
-    addRental.mutate({
-      customerId: refCustomer.current?.value,
-      movieId: refMovie.current?.value,
-    });
+  const onSubmit = (data: NewRental) => {
+    addRental.mutate(data);
   };
 
   const addRental = useAddRental(onAdd);
 
   return (
-    <FormModal name="Open new rental" onSubmit={onSubmit}>
+    <FormModal
+      name="Open new rental"
+      action="add"
+      onSubmit={handleSubmit(onSubmit)}
+      disabled={!isValid || addRental.isPending}
+    >
       <Flex gap="4" direction="column">
-        <TextField.Root ref={refCustomer} placeholder="Type customer ID" />
-        <TextField.Root ref={refMovie} placeholder="Type movie ID" />
+        <Box>
+          <TextField.Root
+            {...register("customerId")}
+            placeholder="Type customer ID"
+          />
+          {errors.customerId && (
+            <ErrorMessage errorMessage={errors.customerId.message ?? ""} />
+          )}
+        </Box>
+        <Box>
+          <TextField.Root
+            {...register("movieId")}
+            placeholder="Type movie ID"
+          />
+          {errors.movieId && (
+            <ErrorMessage errorMessage={errors.movieId.message ?? ""} />
+          )}
+        </Box>
       </Flex>
     </FormModal>
   );

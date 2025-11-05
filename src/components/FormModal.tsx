@@ -1,16 +1,20 @@
+import { UpdateIcon } from "@radix-ui/react-icons";
 import { Button, Dialog, Flex } from "@radix-ui/themes";
 import { ReactNode } from "react";
+
 type TFormModal = {
   name: string;
+  action: "add" | "update";
   description?: string;
   children: ReactNode;
-  onSubmit: () => void;
+  onSubmit: React.FormEventHandler<HTMLFormElement>;
   disabled: boolean;
   className?: string;
 };
 
 const FormModal = ({
   name,
+  action,
   description,
   children,
   onSubmit,
@@ -19,7 +23,7 @@ const FormModal = ({
   return (
     <Dialog.Root>
       <Dialog.Trigger>
-        <Button>{name}</Button>
+        <Button>{action === "update" ? <UpdateIcon /> : name}</Button>
       </Dialog.Trigger>
       <Dialog.Content maxWidth="450px">
         <Dialog.Title>{name}</Dialog.Title>
