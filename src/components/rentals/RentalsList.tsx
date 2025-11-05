@@ -1,11 +1,16 @@
-import { Box, Button, Card, Flex } from "@radix-ui/themes";
+import { Box, Card, Flex, Spinner } from "@radix-ui/themes";
 import useRentals from "../../hooks/rentals/useRentals";
-import UpdateRental from "./UpdateRental";
 import ReturnRental from "./ReturnRental";
+import UpdateRental from "./UpdateRental";
 const RentalsList = () => {
   const { data, error, isLoading } = useRentals();
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading)
+    return (
+      <Flex align="center" justify="center" className="h-{500px}">
+        <Spinner size="3" />
+      </Flex>
+    );
   if (error)
     return (
       <p>

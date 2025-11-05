@@ -1,4 +1,4 @@
-import { Box, Card, Flex } from "@radix-ui/themes";
+import { Box, Card, Flex, Spinner } from "@radix-ui/themes";
 import useCustomers from "../../hooks/customers/useCustomers";
 import useDeleteCustomer from "../../hooks/customers/useDeleteCustomer";
 import DeleteItem from "../DeleteItem";
@@ -8,7 +8,12 @@ export const CustomersList = () => {
   const { data, error, isLoading } = useCustomers();
   const deleteCustomer = useDeleteCustomer();
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading)
+    return (
+      <Flex align="center" justify="center" className="h-{500px}">
+        <Spinner size="3" />
+      </Flex>
+    );
   if (error)
     return (
       <p>

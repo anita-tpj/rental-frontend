@@ -1,4 +1,4 @@
-import { Box, Card, Flex } from "@radix-ui/themes";
+import { Box, Card, Flex, Spinner } from "@radix-ui/themes";
 import useDeleteGenre from "../../hooks/genres/useDeleteGenre";
 import useGenres from "../../hooks/genres/useGenres";
 import DeleteItem from "../DeleteItem";
@@ -12,7 +12,12 @@ const GenresList = ({ isAuthed }: TGenreList) => {
   const { data, error, isLoading } = useGenres();
   const deleteGenre = useDeleteGenre();
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading)
+    return (
+      <Flex align="center" justify="center" className="h-{500px}">
+        <Spinner size="3" />
+      </Flex>
+    );
   if (error)
     return (
       <p>

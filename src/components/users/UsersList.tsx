@@ -1,14 +1,17 @@
-import { Box, Card, Flex } from "@radix-ui/themes";
+import { Box, Card, Flex, Spinner } from "@radix-ui/themes";
 import useDeleteUser from "../../hooks/users/useDeleteUser";
 import useUsers from "../../hooks/users/useUsers";
-import DeleteItem from "../DeleteItem";
-import UpdateUser from "./UpdateUser";
 
 const UsersList = () => {
   const { data, error, isLoading } = useUsers();
   const deleteUser = useDeleteUser();
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading)
+    return (
+      <Flex align="center" justify="center" className="h-{500px}">
+        <Spinner size="3" />
+      </Flex>
+    );
   if (error)
     return (
       <p>
