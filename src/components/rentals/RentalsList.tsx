@@ -1,7 +1,7 @@
 import { Box, Card, Flex, Spinner } from "@radix-ui/themes";
 import useRentals from "../../hooks/rentals/useRentals";
 import ReturnRental from "./ReturnRental";
-import UpdateRental from "./UpdateRental";
+import dayjs from "dayjs";
 const RentalsList = () => {
   const { data, error, isLoading } = useRentals();
 
@@ -20,7 +20,6 @@ const RentalsList = () => {
 
   return (
     <Box>
-      {" "}
       {data?.map((rental) => (
         <Card key={rental._id} className="my-4">
           <Flex justify="between" align="start">
@@ -39,11 +38,11 @@ const RentalsList = () => {
               <div>
                 <p>
                   <strong>Date out: </strong>
-                  {rental.rentalDate}
+                  {dayjs(rental.rentalDate).format("DD/MM/YYYY")}
                 </p>
                 <p>
                   <strong>Date in: </strong>
-                  {rental.returnDate}
+                  {dayjs(rental.returnDate).format("DD/MM/YYYY")}
                 </p>
                 <p>
                   <strong>Fee: </strong>

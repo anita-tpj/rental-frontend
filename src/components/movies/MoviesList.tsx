@@ -23,7 +23,7 @@ const MoviesList = ({ selectedGenre, isAuthed }: MoviesListProps) => {
   if (error)
     return (
       <p>
-        Error loading genres 😢 <br /> {error.message}
+        Error loading movies 😢 <br /> {error.message}
       </p>
     );
   return (
