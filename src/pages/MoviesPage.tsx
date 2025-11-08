@@ -15,7 +15,7 @@ const MoviesPage = () => {
       <Flex
         justify="between"
         align="center"
-        className="border-b border-b-indigo-500 mb-5"
+        className="border-b border-b-indigo-500 mb-5 pb-1"
       >
         <SubTitle subTitle="Movies" />
         {isAuthed ? <MovieForm /> : null}

@@ -9,7 +9,7 @@ const RentalsPage = () => {
       <Flex
         justify="between"
         align="center"
-        className="border-b border-b-indigo-500 mb-5"
+        className="border-b border-b-indigo-500 mb-5 b-1"
       >
         <SubTitle subTitle="Rentals" />
         <RentalForm />
