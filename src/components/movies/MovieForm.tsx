@@ -6,8 +6,8 @@ import useAddMovie from "../../hooks/movies/useAddMovie";
 import { Movie } from "../../services/movieService";
 import ErrorMessage from "../ErrorMessage";
 import FormModal from "../FormModal";
-import GenreSelect from "../genres/GenreSelect";
 import { MovieFormData, MovieSchema } from "./schema";
+import GenreSelect from "../GenreSelect";
 
 function MovieForm() {
   const {

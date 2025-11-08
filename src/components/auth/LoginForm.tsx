@@ -1,7 +1,7 @@
 import { Flex, Text, TextField } from "@radix-ui/themes";
-import useLoginAuth from "../hooks/users/useLoginAuth";
 import { useRef } from "react";
-import FormModal from "./FormModal";
+import useLoginAuth from "../../hooks/users/useLoginAuth";
+import FormModal from "../FormModal";
 
 type TLoginForm = {
   onSuccess: () => void;

@@ -3,11 +3,11 @@ import { Box } from "@radix-ui/themes/src/index.js";
 import useUpdateMovie from "../../hooks/movies/useUpdateMovie";
 import { Movie } from "../../services/movieService";
 import FormModal from "../FormModal";
-import GenreSelect from "../genres/GenreSelect";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { MovieFormData, MovieSchema } from "./schema";
 import ErrorMessage from "../ErrorMessage";
+import GenreSelect from "../GenreSelect";
 
 function UpdateMovie({ movie }: { movie: Movie }) {
   const {

@@ -1,5 +1,5 @@
 import { Select } from "@radix-ui/themes";
-import useGenres from "../../hooks/genres/useGenres";
+import useGenres from "../hooks/genres/useGenres";
 
 interface GenreSelectProps {
   value: string | undefined;
@@ -8,7 +8,7 @@ interface GenreSelectProps {
 
 const GenreSelect = ({ value, onChange }: GenreSelectProps) => {
   const { data, error } = useGenres();
-  
+
   if (error) return;
 
   return (

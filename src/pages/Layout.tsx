@@ -1,13 +1,12 @@
 import { Outlet } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import { Box, Flex } from "@radix-ui/themes";
-import LoginForm from "../components/LoginForm";
-import LogOut from "../components/LogOut";
+import LogOut from "../components/auth/LogOut";
 import { useAuthCtx } from "../context/AuthContext";
+import LoginForm from "../components/auth/LoginForm";
 
 const Layout = () => {
   const { isAuthed, setIsAuthed } = useAuthCtx();
-  
 
   const handleLogOut = () => {
     localStorage.removeItem("token");
