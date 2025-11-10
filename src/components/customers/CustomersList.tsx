@@ -6,8 +6,12 @@ import RentalFormCustomers from "../rentals/RentalFormCustomers";
 import UpdateCustomer from "./UpdateCustomer";
 import useAuth from "../../hooks/auth/useAuth";
 
-export const CustomersList = () => {
-  const { data, error, isLoading } = useCustomers();
+interface CustomersListProps {
+  searchQuery: string;
+}
+
+export const CustomersList = ({ searchQuery }: CustomersListProps) => {
+  const { data, error, isLoading } = useCustomers(searchQuery);
   const deleteCustomer = useDeleteCustomer();
   const { user } = useAuth();
 

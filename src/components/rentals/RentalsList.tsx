@@ -2,8 +2,11 @@ import { Box, Card, Flex, Spinner } from "@radix-ui/themes";
 import useRentals from "../../hooks/rentals/useRentals";
 import ReturnRental from "./ReturnRental";
 import dayjs from "dayjs";
-const RentalsList = () => {
-  const { data, error, isLoading } = useRentals();
+interface RentalListProps {
+  searchQuery: string;
+}
+const RentalsList = ({ searchQuery }: RentalListProps) => {
+  const { data, error, isLoading } = useRentals(searchQuery);
 
   if (isLoading)
     return (

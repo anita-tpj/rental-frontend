@@ -2,8 +2,11 @@ import { Flex } from "@radix-ui/themes";
 import RentalForm from "../components/rentals/RentalForm";
 import RentalsList from "../components/rentals/RentalsList";
 import SubTitle from "../components/SubTitle";
+import SeachInput from "../components/SeachInput";
+import { useState } from "react";
 
 const RentalsPage = () => {
+  const [searchQuery, setSearchQuery] = useState<string>("");
   return (
     <>
       <Flex
@@ -14,7 +17,8 @@ const RentalsPage = () => {
         <SubTitle subTitle="Rentals" />
         <RentalForm />
       </Flex>
-      <RentalsList />
+      <SeachInput onSearch={(query) => setSearchQuery(query)} />
+      <RentalsList searchQuery={searchQuery} />
     </>
   );
 };

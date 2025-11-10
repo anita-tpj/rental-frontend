@@ -2,8 +2,12 @@ import { Flex } from "@radix-ui/themes";
 import SubTitle from "../components/SubTitle";
 import CustomerForm from "../components/customers/CustomerForm";
 import CustomersList from "../components/customers/CustomersList";
+import { useState } from "react";
+import SeachInput from "../components/SeachInput";
 
 const CustomersPage = () => {
+  const [searchQuery, setSearchQuery] = useState<string>("");
+
   return (
     <>
       <Flex
@@ -14,7 +18,8 @@ const CustomersPage = () => {
         <SubTitle subTitle="Customers" />
         <CustomerForm />
       </Flex>
-      <CustomersList />
+      <SeachInput onSearch={(query) => setSearchQuery(query)} />
+      <CustomersList searchQuery={searchQuery} />
       {/* <Link to="/movies/movie-form">Add new customer to list</Link>
       <Outlet /> */}
     </>

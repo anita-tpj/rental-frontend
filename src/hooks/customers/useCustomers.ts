@@ -1,14 +1,16 @@
-import { useQuery } from '@tanstack/react-query'
-import { CACHE_KEY_CUSTOMERS } from '../../constants'
-import type { Customer } from '../../services/customerService'
-import customerService from '../../services/customerService'
+import { useQuery } from "@tanstack/react-query";
+import { CACHE_KEY_CUSTOMERS } from "../../constants";
+import type { Customer } from "../../services/customerService";
+import customerService from "../../services/customerService";
 
+const useCustomers = (searchQuery: string) => {
+  return useQuery<Customer[], Error>({
+    queryKey: [...CACHE_KEY_CUSTOMERS, { searchQuery }],
+    queryFn: () =>
+      customerService.getAll({
+        params: { searchQuery },
+      }),
+  });
+};
 
-const useCustomers = () => {
-    return useQuery<Customer[], Error>({
-    queryKey: CACHE_KEY_CUSTOMERS,
-    queryFn: customerService.getAll
-  })
-}
-
-export default useCustomers
+export default useCustomers;

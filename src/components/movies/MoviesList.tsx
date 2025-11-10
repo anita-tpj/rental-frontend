@@ -8,11 +8,12 @@ import UpdateMovie from "./UpdateMovie";
 
 interface MoviesListProps {
   selectedGenre: string | undefined;
+  searchQuery: string;
 }
 
-const MoviesList = ({ selectedGenre }: MoviesListProps) => {
+const MoviesList = ({ selectedGenre, searchQuery }: MoviesListProps) => {
   const { user } = useAuth();
-  const { data, error, isLoading } = useMovies(selectedGenre);
+  const { data, error, isLoading } = useMovies(selectedGenre, searchQuery);
   const deleteMovie = useDeleteMovie();
 
   if (isLoading)
