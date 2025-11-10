@@ -29,7 +29,6 @@ const router = createBrowserRouter([
         path: "genres",
         element: <GenresPage />,
       },
-      { path: "login", element: <LoginPage /> },
 
       {
         element: <PrivateRoutes />,
