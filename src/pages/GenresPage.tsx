@@ -2,10 +2,11 @@ import { Flex } from "@radix-ui/themes";
 import GenreForm from "../components/genres/GenreForm";
 import GenresList from "../components/genres/GenresList";
 import SubTitle from "../components/SubTitle";
-import { useAuthCtx } from "../context/AuthContext";
+import { useAuthCtx } from "../context/AuthContext-old";
+import useAuth from "../hooks/auth/useAuth";
 
 const GenresPage = () => {
-  const { isAuthed } = useAuthCtx();
+  const { user } = useAuth();
 
   return (
     <>
@@ -15,9 +16,9 @@ const GenresPage = () => {
         className="border-b border-b-indigo-500 mb-5 pb-1"
       >
         <SubTitle subTitle="Genres" />
-        {isAuthed ? <GenreForm /> : null}
+        {user ? <GenreForm /> : null}
       </Flex>
-      <GenresList isAuthed={isAuthed} />
+      <GenresList isAuthed={user} />
     </>
   );
 };

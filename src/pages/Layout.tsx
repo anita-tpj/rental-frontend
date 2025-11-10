@@ -16,7 +16,7 @@ const Layout = () => {
       <main className="p-6 bg-indigo-100">
         <Outlet />
       </main>
-      <footer>
+      <footer className="mt-auto p-4 bg-indigo-300">
         <Footer />
       </footer>
     </Flex>

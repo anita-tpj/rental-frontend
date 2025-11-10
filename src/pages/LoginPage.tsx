@@ -2,17 +2,14 @@ import { Button, Flex, TextField } from "@radix-ui/themes";
 import { useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import SubTitle from "../components/SubTitle";
-import { useAuthCtx } from "../context/AuthContext";
-import useLoginAuth from "../hooks/users/useLoginAuth";
+import useLoginAuth from "../hooks/auth/useLoginAuth";
 
 export default function LoginPage() {
-  const { setIsAuthed } = useAuthCtx();
   const navigate = useNavigate();
   const location = useLocation();
   const from = (location.state as any)?.from?.pathname || "/movies";
   const onSuccess = () => {
     navigate(from, { replace: true });
-    setIsAuthed(true);
   };
   const login = useLoginAuth(onSuccess);
 

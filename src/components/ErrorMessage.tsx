@@ -6,7 +6,7 @@ interface ErrorMessageProps {
 const ErrorMessage = ({ errorMessage }: ErrorMessageProps) => {
   return (
     <Text color="red" size="2">
-      {errorMessage}
+      *{errorMessage}
     </Text>
   );
 };

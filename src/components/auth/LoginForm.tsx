@@ -1,46 +1,79 @@
-import { Flex, Text, TextField } from "@radix-ui/themes";
+import { Box, Flex, Text, TextField } from "@radix-ui/themes";
 import { useRef } from "react";
-import useLoginAuth from "../../hooks/users/useLoginAuth";
+import useLoginAuth from "../../hooks/auth/useLoginAuth";
 import FormModal from "../FormModal";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import ErrorMessage from "../ErrorMessage";
+import { Auth } from "../../services/authService";
+import { AuthFormData, AuthSchema } from "./schema";
 
 type TLoginForm = {
-  onSuccess: () => void;
+  onSuccess: (token: string) => void;
 };
 
 export const LoginForm = ({ onSuccess }: TLoginForm) => {
-  const emailRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isValid },
+  } = useForm<AuthFormData>({
+    resolver: zodResolver(AuthSchema),
+    mode: "onChange",
+  });
 
-  const onSubmit = (event: HTMLFormElement) => {
-    event.preventDefault();
-    if (!emailRef.current?.value || !passwordRef.current?.value)
-      return console.log("Fields are required");
-
-    login.mutate({
-      email: emailRef.current?.value,
-      password: passwordRef.current?.value,
-    });
+  const onSubmit = (data: Auth) => {
+    auth.mutate(data);
   };
 
-  const login = useLoginAuth(onSuccess);
+  const onAuth = () => {
+    reset();
+  };
+
+  const auth = useLoginAuth(onSuccess, onAuth);
 
   return (
-    <FormModal name="Log In" onSubmit={onSubmit}>
-      <Flex direction="column" gap="3">
-        <label>
-          <Text as="div" size="2" mb="1" weight="bold">
-            Email
-          </Text>
-          <TextField.Root ref={emailRef} placeholder="Enter your email" />
-        </label>
-        <label>
-          <Text as="div" size="2" mb="1" weight="bold">
-            Password
-          </Text>
-          <TextField.Root ref={passwordRef} placeholder="Enter your password" />
-        </label>
-      </Flex>
-    </FormModal>
+    <>
+      <FormModal
+        name="Log In"
+        onSubmit={handleSubmit(onSubmit)}
+        action="add"
+        disabled={!isValid || auth.isPending}
+      >
+        <Flex direction="column" gap="3">
+          <Box>
+            {" "}
+            <label>
+              <Text as="div" size="2" mb="1" weight="bold">
+                Email
+              </Text>
+              <TextField.Root
+                {...register("email")}
+                placeholder="Enter your email"
+              />
+            </label>
+            {errors.email && (
+              <ErrorMessage errorMessage={errors.email.message ?? ""} />
+            )}
+          </Box>
+          <Box>
+            <label>
+              <Text as="div" size="2" mb="1" weight="bold">
+                Password
+              </Text>
+              <TextField.Root
+                {...register("password")}
+                placeholder="Enter your password"
+              />
+            </label>
+            {errors.password && (
+              <ErrorMessage errorMessage={errors.password.message ?? ""} />
+            )}
+          </Box>
+        </Flex>
+      </FormModal>
+    </>
   );
 };
 

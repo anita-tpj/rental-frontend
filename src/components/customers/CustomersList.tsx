@@ -2,13 +2,14 @@ import { Box, Card, Flex, Spinner } from "@radix-ui/themes";
 import useCustomers from "../../hooks/customers/useCustomers";
 import useDeleteCustomer from "../../hooks/customers/useDeleteCustomer";
 import DeleteItem from "../DeleteItem";
-import UpdateCustomer from "./UpdateCustomer";
-import RentalFormCustomer from "../rentals/RentalFormMovies";
 import RentalFormCustomers from "../rentals/RentalFormCustomers";
+import UpdateCustomer from "./UpdateCustomer";
+import useAuth from "../../hooks/auth/useAuth";
 
 export const CustomersList = () => {
   const { data, error, isLoading } = useCustomers();
   const deleteCustomer = useDeleteCustomer();
+  const { user } = useAuth();
 
   if (isLoading)
     return (
@@ -27,7 +28,7 @@ export const CustomersList = () => {
     <Box>
       {data?.map((customer) => (
         <Card key={customer._id} className="my-4">
-          <Flex justify="between" align="center">
+          <Flex justify="between" align="start">
             <Box>
               <p>Name: {customer.name}</p>
               <p>Phone: {customer.phone}</p>
@@ -39,12 +40,14 @@ export const CustomersList = () => {
                 customerId={customer._id!}
                 customerName={customer.name}
               />
-              <Flex gap="2" className="mt-2">
-                <UpdateCustomer customer={customer} />
-                <DeleteItem
-                  onDelete={() => deleteCustomer.mutate(customer._id!)}
-                />
-              </Flex>
+              {user && user?.isAdmin && (
+                <Flex gap="2" className="mt-2">
+                  <UpdateCustomer customer={customer} />
+                  <DeleteItem
+                    onDelete={() => deleteCustomer.mutate(customer._id!)}
+                  />
+                </Flex>
+              )}
             </Flex>
           </Flex>
         </Card>

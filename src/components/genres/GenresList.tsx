@@ -3,14 +3,12 @@ import useDeleteGenre from "../../hooks/genres/useDeleteGenre";
 import useGenres from "../../hooks/genres/useGenres";
 import DeleteItem from "../DeleteItem";
 import UpdateGenre from "./UpdateGenre";
+import useAuth from "../../hooks/auth/useAuth";
 
-type TGenreList = {
-  isAuthed: boolean;
-};
-
-const GenresList = ({ isAuthed }: TGenreList) => {
+const GenresList = () => {
   const { data, error, isLoading } = useGenres();
   const deleteGenre = useDeleteGenre();
+  const { user } = useAuth();
 
   if (isLoading)
     return (
@@ -30,12 +28,12 @@ const GenresList = ({ isAuthed }: TGenreList) => {
         <Card key={genre._id} className="my-4">
           <Flex justify="between" align="center">
             {genre.name}
-            {isAuthed ? (
+            {user && user?.isAdmin && (
               <Flex gap="2">
                 <UpdateGenre genre={genre} />
                 <DeleteItem onDelete={() => deleteGenre.mutate(genre._id!)} />
               </Flex>
-            ) : null}
+            )}
           </Flex>
         </Card>
       ))}

@@ -1,27 +1,26 @@
-import { useAuthCtx } from "../context/AuthContext";
-import { Box, Flex } from "@radix-ui/themes";
+import { Box, Flex, Text } from "@radix-ui/themes";
 import LogOut from "./auth/LogOut";
 import LoginForm from "./auth/LoginForm";
+import useAuth from "../hooks/auth/useAuth";
 
 const Header = () => {
-  const { isAuthed, setIsAuthed } = useAuthCtx();
+  const { user, login, logout } = useAuth();
 
-  const handleLogOut = () => {
-    localStorage.removeItem("token");
-    setIsAuthed(false);
-  };
-
-  const handleLogIn = () => {
-    setIsAuthed(true);
-  };
   return (
     <Box className=" border-b mb-6 text-white bg-indigo-500 p-6">
-      <Flex justify="between">
+      <Flex justify="between" align="center">
         <h1 className="text-3xl font-bold">Vidly Rental App</h1>
-        {isAuthed ? (
-          <LogOut onConfirm={handleLogOut} />
+        {user ? (
+          <Flex
+            align="center"
+            gap="2"
+            direction={{ initial: "column", md: "row" }}
+          >
+            <Text size={{ initial: "1", md: "3" }}>Hi, {user.userName}!</Text>
+            <LogOut onConfirm={() => logout()} />
+          </Flex>
         ) : (
-          <LoginForm onSuccess={handleLogIn} />
+          <LoginForm onSuccess={(token: string) => login(token)} />
         )}
       </Flex>
     </Box>

@@ -1,4 +1,5 @@
-import { Box, Card, Flex, Spinner } from "@radix-ui/themes";
+import { Card, Flex, Spinner } from "@radix-ui/themes";
+import useAuth from "../../hooks/auth/useAuth";
 import useDeleteMovie from "../../hooks/movies/useDeleteMovie";
 import useMovies from "../../hooks/movies/useMovies";
 import DeleteItem from "../DeleteItem";
@@ -7,10 +8,10 @@ import UpdateMovie from "./UpdateMovie";
 
 interface MoviesListProps {
   selectedGenre: string | undefined;
-  isAuthed: boolean;
 }
 
-const MoviesList = ({ selectedGenre, isAuthed }: MoviesListProps) => {
+const MoviesList = ({ selectedGenre }: MoviesListProps) => {
+  const { user } = useAuth();
   const { data, error, isLoading } = useMovies(selectedGenre);
   const deleteMovie = useDeleteMovie();
 
@@ -38,16 +39,20 @@ const MoviesList = ({ selectedGenre, isAuthed }: MoviesListProps) => {
               <p>Stock: {movie.numberInStock}</p>
               <p>ID: {movie._id}</p>
             </div>
-            {isAuthed ? (
+            {user ? (
               <Flex direction="column">
                 <RentalFormMovies
                   movieId={movie._id!}
                   movieTitle={movie.title}
                 />
-                <Flex gap="2" className="mt-2">
-                  <UpdateMovie movie={movie} />
-                  <DeleteItem onDelete={() => deleteMovie.mutate(movie._id!)} />
-                </Flex>
+                {user.isAdmin && (
+                  <Flex gap="2" className="mt-2">
+                    <UpdateMovie movie={movie} />
+                    <DeleteItem
+                      onDelete={() => deleteMovie.mutate(movie._id!)}
+                    />
+                  </Flex>
+                )}
               </Flex>
             ) : null}
           </Flex>

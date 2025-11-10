@@ -7,7 +7,7 @@ import { Theme } from "@radix-ui/themes";
 import "@radix-ui/themes/styles.css";
 import { RouterProvider } from "react-router-dom";
 import router from "./routes.tsx";
-import { AuthProvider } from "./context/AuthContext.tsx";
+import AuthProvider from "./providers/AuthProvider.tsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {
