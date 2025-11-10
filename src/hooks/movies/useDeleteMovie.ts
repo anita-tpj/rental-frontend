@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CACHE_KEY_MOVIES } from "../../constants";
 import type { Movie } from "../../services/movieService";
 import movieService from "../../services/movieService";
+import toast from "react-hot-toast";
 
 const useDeleteMovie = () => {
   const queryClient = useQueryClient();
@@ -10,6 +11,10 @@ const useDeleteMovie = () => {
     mutationFn: movieService.delete,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: CACHE_KEY_MOVIES });
+      toast.success("Movie deleted successfully!");
+    },
+    onError: () => {
+      toast.error("Failed to delete movie");
     },
   });
 };
