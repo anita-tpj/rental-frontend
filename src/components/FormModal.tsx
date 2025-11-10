@@ -10,6 +10,7 @@ type TFormModal = {
   children: ReactNode;
   onSubmit: React.FormEventHandler<HTMLFormElement>;
   disabled: boolean;
+  disabledTrigger?: boolean;
   className?: string;
 };
 
@@ -20,11 +21,12 @@ const FormModal = ({
   children,
   onSubmit,
   disabled,
+  disabledTrigger,
 }: TFormModal) => {
   return (
     <Dialog.Root>
       <Dialog.Trigger>
-        <Button>
+        <Button disabled={disabledTrigger}>
           {action === "rent" || action === "return" ? (
             action.toUpperCase()
           ) : action === "update" ? (

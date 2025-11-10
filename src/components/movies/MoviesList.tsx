@@ -44,6 +44,7 @@ const MoviesList = ({ selectedGenre }: MoviesListProps) => {
                 <RentalFormMovies
                   movieId={movie._id!}
                   movieTitle={movie.title}
+                  movieStock={!movie.numberInStock}
                 />
                 {user.isAdmin && (
                   <Flex gap="2" className="mt-2">

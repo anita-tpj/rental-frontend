@@ -1,7 +1,7 @@
 import { Box, Flex, Text } from "@radix-ui/themes";
+import useAuth from "../hooks/auth/useAuth";
 import LogOut from "./auth/LogOut";
 import LoginForm from "./auth/LoginForm";
-import useAuth from "../hooks/auth/useAuth";
 
 const Header = () => {
   const { user, login, logout } = useAuth();

@@ -15,11 +15,13 @@ const MovieSelect = ({ value, onChange }: MovieSelectProps) => {
     <Select.Root size="3" value={value} onValueChange={onChange}>
       <Select.Trigger className="w-full" placeholder="Select movie" />
       <Select.Content>
-        {data?.map((movie) => (
-          <Select.Item key={movie._id} value={movie._id!}>
-            {movie.title}
-          </Select.Item>
-        ))}
+        {data?.map((movie) =>
+          movie.numberInStock ? (
+            <Select.Item key={movie._id} value={movie._id!}>
+              {movie.title}
+            </Select.Item>
+          ) : null
+        )}
       </Select.Content>
     </Select.Root>
   );

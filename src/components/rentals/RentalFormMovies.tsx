@@ -11,9 +11,14 @@ import CustomerSelect from "../CustomerSelect";
 interface RentalFormCustomerProps {
   movieId: string;
   movieTitle: string;
+  movieStock: boolean;
 }
 
-const RentalFormMovies = ({ movieId, movieTitle }: RentalFormCustomerProps) => {
+const RentalFormMovies = ({
+  movieId,
+  movieTitle,
+  movieStock,
+}: RentalFormCustomerProps) => {
   const {
     register,
     handleSubmit,
@@ -41,6 +46,7 @@ const RentalFormMovies = ({ movieId, movieTitle }: RentalFormCustomerProps) => {
       action="rent"
       onSubmit={handleSubmit(onSubmit)}
       disabled={!isValid || addRental.isPending}
+      disabledTrigger={movieStock}
     >
       <Flex gap="4" direction="column">
         <Box hidden>

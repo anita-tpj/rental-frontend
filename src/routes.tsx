@@ -1,15 +1,14 @@
 import { createBrowserRouter } from "react-router-dom";
-import HomePage from "./pages/HomePage";
-import GenresPage from "./pages/GenresPage";
-import Layout from "./pages/Layout";
-import ErrorPage from "./pages/ErrorPage";
 import MovieForm from "./components/movies/MovieForm";
-import PrivateRoutes from "./pages/PrivateRoutes";
-import MoviesPage from "./pages/MoviesPage";
 import CustomersPage from "./pages/CustomerPage";
-import UsersPage from "./pages/UsersPage";
-import LoginPage from "./pages/LoginPage";
+import ErrorPage from "./pages/ErrorPage";
+import GenresPage from "./pages/GenresPage";
+import HomePage from "./pages/HomePage";
+import Layout from "./pages/Layout";
+import MoviesPage from "./pages/MoviesPage";
+import PrivateRoutes from "./pages/PrivateRoutes";
 import RentalsPage from "./pages/RentalPage";
+import UsersPage from "./pages/UsersPage";
 
 const router = createBrowserRouter([
   {

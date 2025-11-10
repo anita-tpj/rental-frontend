@@ -1,11 +1,10 @@
-import { Box, Flex, Text, TextField } from "@radix-ui/themes";
-import { useRef } from "react";
-import useLoginAuth from "../../hooks/auth/useLoginAuth";
-import FormModal from "../FormModal";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import ErrorMessage from "../ErrorMessage";
+import { Box, Flex, Text, TextField } from "@radix-ui/themes";
+import { useForm } from "react-hook-form";
+import useLoginAuth from "../../hooks/auth/useLoginAuth";
 import { Auth } from "../../services/authService";
+import ErrorMessage from "../ErrorMessage";
+import FormModal from "../FormModal";
 import { AuthFormData, AuthSchema } from "./schema";
 
 type TLoginForm = {

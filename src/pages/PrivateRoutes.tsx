@@ -1,4 +1,4 @@
-import { Box, Text } from "@radix-ui/themes";
+import { Box } from "@radix-ui/themes";
 import { Outlet } from "react-router-dom";
 import LoginForm from "../components/auth/LoginForm";
 import useAuth from "../hooks/auth/useAuth";
