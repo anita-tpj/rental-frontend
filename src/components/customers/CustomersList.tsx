@@ -5,6 +5,7 @@ import DeleteItem from "../DeleteItem";
 import RentalFormCustomers from "../rentals/RentalFormCustomers";
 import UpdateCustomer from "./UpdateCustomer";
 import useAuth from "../../hooks/auth/useAuth";
+import CustomersListSkeleton from "./CustomerListSkeleton";
 
 interface CustomersListProps {
   searchQuery?: string;
@@ -15,12 +16,7 @@ export const CustomersList = ({ searchQuery }: CustomersListProps) => {
   const deleteCustomer = useDeleteCustomer();
   const { user } = useAuth();
 
-  if (isLoading)
-    return (
-      <Flex align="center" justify="center" className="h-{500px}">
-        <Spinner size="3" />
-      </Flex>
-    );
+  if (isLoading) return <CustomersListSkeleton />;
   if (error)
     return (
       <p>

@@ -2,18 +2,14 @@ import { Box, Card, Flex, Spinner } from "@radix-ui/themes";
 import useRentals from "../../hooks/rentals/useRentals";
 import ReturnRental from "./ReturnRental";
 import dayjs from "dayjs";
+import RentalsListSkeleton from "./RentalListSkeleton";
 interface RentalListProps {
   searchQuery: string;
 }
 const RentalsList = ({ searchQuery }: RentalListProps) => {
   const { data, error, isLoading } = useRentals(searchQuery);
 
-  if (isLoading)
-    return (
-      <Flex align="center" justify="center" className="h-{500px}">
-        <Spinner size="3" />
-      </Flex>
-    );
+  if (isLoading) return <RentalsListSkeleton />;
   if (error)
     return (
       <p>

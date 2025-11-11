@@ -1,10 +1,11 @@
-import { Card, Flex, Spinner } from "@radix-ui/themes";
+import { Box, Card, Flex, Spinner } from "@radix-ui/themes";
 import useAuth from "../../hooks/auth/useAuth";
 import useDeleteMovie from "../../hooks/movies/useDeleteMovie";
 import useMovies from "../../hooks/movies/useMovies";
 import DeleteItem from "../DeleteItem";
 import RentalFormMovies from "../rentals/RentalFormMovies";
 import UpdateMovie from "./UpdateMovie";
+import MoviesListSkeleton from "./MoviesListSkeleton";
 
 interface MoviesListProps {
   selectedGenre: string | undefined;
@@ -16,12 +17,7 @@ const MoviesList = ({ selectedGenre, searchQuery }: MoviesListProps) => {
   const { data, error, isLoading } = useMovies(selectedGenre, searchQuery);
   const deleteMovie = useDeleteMovie();
 
-  if (isLoading)
-    return (
-      <Flex align="center" justify="center" className="h-{500px}">
-        <Spinner size="3" />
-      </Flex>
-    );
+  if (isLoading) return <MoviesListSkeleton />;
   if (error)
     return (
       <p>
@@ -29,7 +25,7 @@ const MoviesList = ({ selectedGenre, searchQuery }: MoviesListProps) => {
       </p>
     );
   return (
-    <div>
+    <Box>
       {data?.map((movie) => (
         <Card key={movie._id} className="my-4">
           <Flex justify="between">
@@ -60,7 +56,7 @@ const MoviesList = ({ selectedGenre, searchQuery }: MoviesListProps) => {
           </Flex>
         </Card>
       ))}
-    </div>
+    </Box>
   );
 };
 
