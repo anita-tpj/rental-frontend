@@ -19,7 +19,7 @@ const CustomersPage = () => {
         <CustomerForm />
       </Flex>
       <SeachInput onSearch={(query) => setSearchQuery(query)} />
-      <CustomersList searchQuery={searchQuery} />
+      <CustomersList searchQuery={searchQuery ?? ""} />
       {/* <Link to="/movies/movie-form">Add new customer to list</Link>
       <Outlet /> */}
     </>

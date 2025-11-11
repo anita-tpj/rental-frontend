@@ -7,7 +7,7 @@ import UpdateCustomer from "./UpdateCustomer";
 import useAuth from "../../hooks/auth/useAuth";
 
 interface CustomersListProps {
-  searchQuery: string;
+  searchQuery?: string;
 }
 
 export const CustomersList = ({ searchQuery }: CustomersListProps) => {

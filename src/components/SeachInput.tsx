@@ -13,7 +13,7 @@ const SeachInput = ({ onSearch }: SearchInputProps) => {
     <form
       onSubmit={(event) => {
         event.preventDefault();
-        if (ref.current && ref.current.value) onSearch(ref.current.value);
+        onSearch(ref.current?.value ?? "");
       }}
     >
       <TextField.Root ref={ref} size="3" placeholder="Search...">
