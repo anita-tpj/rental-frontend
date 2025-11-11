@@ -4,7 +4,7 @@ import { Skeleton } from "@radix-ui/themes";
 
 export default function MoviesListSkeleton({ rows = 8 }: { rows?: number }) {
   return (
-    <div className="flex flex-col gap-4 p-1">
+    <div className="flex flex-col gap-4 pt-2">
       {Array.from({ length: rows }).map((_, i) => (
         <Card key={i} className="my-1">
           <Flex justify="between" align="center" className="gap-6">
