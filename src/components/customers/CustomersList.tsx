@@ -1,4 +1,4 @@
-import { Box, Card, Flex, Spinner } from "@radix-ui/themes";
+import { Box, Card, Flex } from "@radix-ui/themes";
 import useCustomers from "../../hooks/customers/useCustomers";
 import useDeleteCustomer from "../../hooks/customers/useDeleteCustomer";
 import DeleteItem from "../DeleteItem";
@@ -6,15 +6,30 @@ import RentalFormCustomers from "../rentals/RentalFormCustomers";
 import UpdateCustomer from "./UpdateCustomer";
 import useAuth from "../../hooks/auth/useAuth";
 import CustomersListSkeleton from "./CustomerListSkeleton";
+import Pagination from "../Pagination";
+import { useEffect, useState } from "react";
 
 interface CustomersListProps {
   searchQuery?: string;
 }
 
 export const CustomersList = ({ searchQuery }: CustomersListProps) => {
-  const { data, error, isLoading } = useCustomers(searchQuery);
-  const deleteCustomer = useDeleteCustomer();
   const { user } = useAuth();
+  const pageSize = 10;
+  const [page, setPage] = useState(1);
+
+  useEffect(() => {
+    setPage(1);
+  }, [searchQuery]);
+
+  const deleteCustomer = useDeleteCustomer();
+
+  const { data, error, isLoading } = useCustomers({
+    searchQuery,
+    page,
+    pageSize,
+  });
+  const hasNext = data?.length === pageSize;
 
   if (isLoading) return <CustomersListSkeleton />;
   if (error)
@@ -52,6 +67,14 @@ export const CustomersList = ({ searchQuery }: CustomersListProps) => {
           </Flex>
         </Card>
       ))}
+      {(page > 1 || hasNext) && (
+        <Pagination
+          hasNext={hasNext}
+          page={page}
+          onNext={() => setPage((page) => page + 1)}
+          onPrev={() => setPage((page) => page - 1)}
+        />
+      )}
     </Box>
   );
 };

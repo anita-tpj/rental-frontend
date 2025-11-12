@@ -1,10 +1,15 @@
 import { Box, Card, Flex, Spinner } from "@radix-ui/themes";
-import useDeleteUser from "../../hooks/users/useDeleteUser";
+import { useState } from "react";
 import useUsers from "../../hooks/users/useUsers";
+import Pagination from "../Pagination";
 
 const UsersList = () => {
-  const { data, error, isLoading } = useUsers();
-  const deleteUser = useDeleteUser();
+  const pageSize = 5;
+  const [page, setPage] = useState(1);
+  const { data, error, isLoading } = useUsers({ page, pageSize });
+  const total = data?.total ?? 0;
+  const hasNext = page * pageSize < total;
+  //const deleteUser = useDeleteUser();
 
   if (isLoading)
     return (
@@ -20,7 +25,7 @@ const UsersList = () => {
     );
   return (
     <Box>
-      {data?.map((user) => (
+      {data?.items?.map((user) => (
         <Card key={user._id} className="my-4">
           <Flex justify="between" align="start">
             <Box>
@@ -35,6 +40,14 @@ const UsersList = () => {
           </Flex>
         </Card>
       ))}
+      {(page > 1 || hasNext) && (
+        <Pagination
+          hasNext={hasNext}
+          page={page}
+          onNext={() => setPage((page) => page + 1)}
+          onPrev={() => setPage((page) => page - 1)}
+        />
+      )}
     </Box>
   );
 };

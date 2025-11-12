@@ -1,13 +1,27 @@
-import { Box, Card, Flex, Spinner } from "@radix-ui/themes";
+import { Box, Card, Flex } from "@radix-ui/themes";
 import useRentals from "../../hooks/rentals/useRentals";
 import ReturnRental from "./ReturnRental";
 import dayjs from "dayjs";
 import RentalsListSkeleton from "./RentalListSkeleton";
+import Pagination from "../Pagination";
+import { useEffect, useState } from "react";
 interface RentalListProps {
   searchQuery: string;
 }
 const RentalsList = ({ searchQuery }: RentalListProps) => {
-  const { data, error, isLoading } = useRentals(searchQuery);
+  const pageSize = 10;
+  const [page, setPage] = useState(1);
+
+  useEffect(() => {
+    setPage(1);
+  }, [searchQuery]);
+
+  const { data, error, isLoading } = useRentals({
+    searchQuery,
+    pageSize,
+    page,
+  });
+  const hasNext = data?.length === pageSize;
 
   if (isLoading) return <RentalsListSkeleton />;
   if (error)
@@ -56,6 +70,14 @@ const RentalsList = ({ searchQuery }: RentalListProps) => {
           </Flex>
         </Card>
       ))}
+      {(page > 1 || hasNext) && (
+        <Pagination
+          hasNext={hasNext}
+          page={page}
+          onNext={() => setPage((page) => page + 1)}
+          onPrev={() => setPage((page) => page - 1)}
+        />
+      )}
     </Box>
   );
 };
