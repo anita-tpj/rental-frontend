@@ -10,11 +10,20 @@ import MoviesListSkeleton from "./MoviesListSkeleton";
 interface MoviesListProps {
   selectedGenre: string | undefined;
   searchQuery: string;
+  sortOrder: string;
 }
 
-const MoviesList = ({ selectedGenre, searchQuery }: MoviesListProps) => {
+const MoviesList = ({
+  selectedGenre,
+  searchQuery,
+  sortOrder,
+}: MoviesListProps) => {
   const { user } = useAuth();
-  const { data, error, isLoading } = useMovies(selectedGenre, searchQuery);
+  const { data, error, isLoading } = useMovies({
+    selectedGenre,
+    searchQuery,
+    sortOrder,
+  });
   const deleteMovie = useDeleteMovie();
 
   if (isLoading) return <MoviesListSkeleton />;

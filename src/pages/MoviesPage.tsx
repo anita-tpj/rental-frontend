@@ -6,11 +6,13 @@ import MoviesList from "../components/movies/MoviesList";
 import SubTitle from "../components/SubTitle";
 import useAuth from "../hooks/auth/useAuth";
 import SeachInput from "../components/SeachInput";
+import SortSelect from "../components/SortSelect";
 
 const MoviesPage = () => {
-  const [selectedGenre, setSelectedGenre] = useState<string>();
   const { user } = useAuth();
+  const [selectedGenre, setSelectedGenre] = useState<string>();
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [sortOrder, setSortOrder] = useState<string>("");
 
   return (
     <>
@@ -22,17 +24,23 @@ const MoviesPage = () => {
         <SubTitle subTitle="Movies" />
         {user ? <MovieForm /> : null}
       </Flex>
-      <Flex justify="between" gap="4">
+      <SeachInput onSearch={(query) => setSearchQuery(query)} />
+      <Flex justify="between" gap="4" mt="4">
         <GenreSelect
           value={selectedGenre}
           onChange={(genre) => setSelectedGenre(genre)}
         />
-        <SeachInput onSearch={(query) => setSearchQuery(query)} />
+        <SortSelect
+          value={sortOrder}
+          onChange={(order) => setSortOrder(order)}
+        />
       </Flex>
 
-      <MoviesList selectedGenre={selectedGenre} searchQuery={searchQuery} />
-      {/* <Link to="/movies/new">Add new movie to list</Link>
-      <Outlet /> */}
+      <MoviesList
+        selectedGenre={selectedGenre}
+        searchQuery={searchQuery}
+        sortOrder={sortOrder}
+      />
     </>
   );
 };
