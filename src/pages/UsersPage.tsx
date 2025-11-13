@@ -2,8 +2,11 @@ import { Flex } from "@radix-ui/themes";
 import SubTitle from "../components/SubTitle";
 import UserForm from "../components/users/UserForm";
 import UsersList from "../components/users/UsersList";
+import useAuth from "../hooks/auth/useAuth";
 
 const UsersPage = () => {
+  const { user } = useAuth();
+  const isSuperAdmin = user && user?.role === "Super Admin";
   return (
     <>
       <Flex
@@ -12,11 +15,9 @@ const UsersPage = () => {
         className="border-b border-b-indigo-500 mb-5 pb-1"
       >
         <SubTitle subTitle="Users" />
-        <UserForm />
+        {isSuperAdmin && <UserForm />}
       </Flex>
       <UsersList />
-      {/* <Link to="/movies/movie-form">Add new customer to list</Link>
-      <Outlet /> */}
     </>
   );
 };

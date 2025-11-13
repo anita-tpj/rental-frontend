@@ -19,6 +19,7 @@ const MoviesList = ({
   sortOrder,
 }: MoviesListProps) => {
   const { user } = useAuth();
+  const isAdmin = user && user?.role === "Admin";
   const { data, error, isLoading } = useMovies({
     selectedGenre,
     searchQuery,
@@ -52,7 +53,7 @@ const MoviesList = ({
                   movieTitle={movie.title}
                   movieStock={!movie.numberInStock}
                 />
-                {user.isAdmin && (
+                {isAdmin && (
                   <Flex gap="2" className="mt-2">
                     <UpdateMovie movie={movie} />
                     <DeleteItem

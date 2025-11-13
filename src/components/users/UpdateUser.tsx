@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Box, Checkbox, Flex, TextField } from "@radix-ui/themes";
+import { Box, Checkbox, Flex, Select, TextField } from "@radix-ui/themes";
 import { Controller, useForm } from "react-hook-form";
 import useUpdateUser from "../../hooks/users/useUpdateUser";
 import { User } from "../../services/userService";
@@ -20,7 +20,7 @@ export const UpdateUser = ({ user }: { user: User }) => {
       userName: user.userName,
       email: user.email,
       password: user.password,
-      isAdmin: user.isAdmin,
+      role: user.role,
     },
   });
 
@@ -50,28 +50,28 @@ export const UpdateUser = ({ user }: { user: User }) => {
             <ErrorMessage errorMessage={errors.email.message ?? ""} />
           )}
         </Box>
-        <Box>
-          <TextField.Root
-            {...register("password")}
-            placeholder="Type password"
-          />
-          {errors.password && (
-            <ErrorMessage errorMessage={errors.password.message ?? ""} />
-          )}
+        <Box hidden>
+          <TextField.Root {...register("password")} />
         </Box>
-        <Flex gap="2" align="center">
-          <Controller
-            control={control}
-            name="isAdmin"
-            render={({ field: { value, onChange } }) => (
-              <Checkbox
-                checked={value}
-                onCheckedChange={(v) => onChange(v === true)}
-              />
-            )}
-          />
-          Admin rule
-        </Flex>
+        <Controller
+          control={control}
+          name="role"
+          render={({ field: { value, onChange } }) => (
+            <Select.Root
+              size="3"
+              value={value}
+              onValueChange={onChange}
+              defaultValue={value}
+            >
+              <Select.Trigger placeholder="Select role" />
+              <Select.Content>
+                <Select.Item value="User">User</Select.Item>
+                <Select.Item value="Admin">Admin</Select.Item>
+                <Select.Item value="Super Admin">Super Admin</Select.Item>
+              </Select.Content>
+            </Select.Root>
+          )}
+        />
       </Flex>
     </FormModal>
   );

@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Box, Checkbox, Flex, TextField } from "@radix-ui/themes";
+import { Box, Flex, Select, TextField } from "@radix-ui/themes";
 import { Controller, useForm } from "react-hook-form";
 import useAddUser from "../../hooks/users/useAddUser";
 import { User } from "../../services/userService";
@@ -17,7 +17,7 @@ const UserForm = () => {
   } = useForm<UserFormData>({
     resolver: zodResolver(UserSchema),
     mode: "onChange",
-    defaultValues: { email: "", password: "", isAdmin: false },
+    defaultValues: { email: "", password: "", role: "" },
   });
   const onAdd = () => {
     reset();
@@ -58,19 +58,20 @@ const UserForm = () => {
             <ErrorMessage errorMessage={errors.password.message ?? ""} />
           )}
         </Box>
-        <Flex gap="2" align="center">
-          <Controller
-            control={control}
-            name="isAdmin"
-            render={({ field: { value, onChange } }) => (
-              <Checkbox
-                checked={value}
-                onCheckedChange={(v) => onChange(v === true)}
-              />
-            )}
-          />
-          Admin rule
-        </Flex>
+        <Controller
+          control={control}
+          name="role"
+          render={({ field: { value, onChange } }) => (
+            <Select.Root size="3" value={value} onValueChange={onChange}>
+              <Select.Trigger placeholder="Select role" />
+              <Select.Content>
+                <Select.Item value="User">User</Select.Item>
+                <Select.Item value="Admin">Admin</Select.Item>
+                <Select.Item value="Super Admin">Super Admin</Select.Item>
+              </Select.Content>
+            </Select.Root>
+          )}
+        />
       </Flex>
     </FormModal>
   );

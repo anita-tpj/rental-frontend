@@ -15,6 +15,7 @@ interface CustomersListProps {
 
 export const CustomersList = ({ searchQuery }: CustomersListProps) => {
   const { user } = useAuth();
+  const isAdmin = user && user?.role === "Admin";
   const pageSize = 10;
   const [page, setPage] = useState(1);
 
@@ -55,7 +56,7 @@ export const CustomersList = ({ searchQuery }: CustomersListProps) => {
                 customerId={customer._id!}
                 customerName={customer.name}
               />
-              {user && user?.isAdmin && (
+              {isAdmin && (
                 <Flex gap="2" className="mt-2">
                   <UpdateCustomer customer={customer} />
                   <DeleteItem

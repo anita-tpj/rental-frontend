@@ -2,6 +2,10 @@ import { Box, Card, Flex, Spinner } from "@radix-ui/themes";
 import { useState } from "react";
 import useUsers from "../../hooks/users/useUsers";
 import Pagination from "../Pagination";
+import DeleteItem from "../DeleteItem";
+import useDeleteUser from "../../hooks/users/useDeleteUser";
+import useAuth from "../../hooks/auth/useAuth";
+import UpdateUser from "./UpdateUser";
 
 const UsersList = () => {
   const pageSize = 5;
@@ -9,7 +13,9 @@ const UsersList = () => {
   const { data, error, isLoading } = useUsers({ page, pageSize });
   const total = data?.total ?? 0;
   const hasNext = page * pageSize < total;
-  //const deleteUser = useDeleteUser();
+  const deleteUser = useDeleteUser();
+  const { user } = useAuth();
+  const isSuperAdmin = user && user?.role === "Super Admin";
 
   if (isLoading)
     return (
@@ -31,12 +37,14 @@ const UsersList = () => {
             <Box>
               <p>Name: {user.userName}</p>
               <p>Email: {user.email}</p>
-              <p>Admin: {user.isAdmin ? "Yes" : "No"}</p>
+              <p>Role: {user.role}</p>
             </Box>
-            {/* <Flex gap="2">
-              <UpdateUser user={user} />
-              <DeleteItem onDelete={() => deleteUser.mutate(user._id!)} />
-            </Flex> */}
+            {isSuperAdmin && (
+              <Flex gap="2">
+                <UpdateUser user={user} />
+                <DeleteItem onDelete={() => deleteUser.mutate(user._id!)} />
+              </Flex>
+            )}
           </Flex>
         </Card>
       ))}

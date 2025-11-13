@@ -9,7 +9,7 @@ interface AuthProviderProps {
 export interface DecodedUser {
   _id: string;
   userName?: string;
-  isAdmin?: boolean;
+  role?: string;
 }
 
 const init = (): DecodedUser | null => {
