@@ -12,7 +12,12 @@ const GenreSelect = ({ value, onChange }: GenreSelectProps) => {
   if (error) return;
 
   return (
-    <Select.Root size="3" value={value} onValueChange={onChange}>
+    <Select.Root
+      size="3"
+      value={value}
+      onValueChange={onChange}
+      defaultValue={value}
+    >
       <Select.Trigger className="w-full" placeholder="Select genre" />
       <Select.Content>
         {data?.map((genre) => (

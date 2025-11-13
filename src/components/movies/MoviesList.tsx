@@ -19,7 +19,7 @@ const MoviesList = ({
   sortOrder,
 }: MoviesListProps) => {
   const { user } = useAuth();
-  const isAdmin = user && user?.role === "Admin";
+  const isAdmin = user && (user?.role === "Admin" || user?.role === "Super Admin");
   const { data, error, isLoading } = useMovies({
     selectedGenre,
     searchQuery,

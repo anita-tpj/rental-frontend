@@ -15,7 +15,8 @@ interface CustomersListProps {
 
 export const CustomersList = ({ searchQuery }: CustomersListProps) => {
   const { user } = useAuth();
-  const isAdmin = user && user?.role === "Admin";
+  const isAdmin =
+    user && (user?.role === "Admin" || user?.role === "Super Admin");
   const pageSize = 10;
   const [page, setPage] = useState(1);
 
